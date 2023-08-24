@@ -1,0 +1,20 @@
+.sign-up{
+    border: 3px solid black;
+    margin: 0 auto;
+    max-width: 70%;
+    &__header{
+        display: flex;
+        cursor: pointer;
+        &>* {
+            text-align: center;
+            font-size: 2.1rem;
+            width: 50%;
+        }
+    }
+    &__form{
+        width: 100%;
+        font-size: 2rem;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+}
