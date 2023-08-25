@@ -7,8 +7,22 @@
         cursor: pointer;
         &>* {
             text-align: center;
-            font-size: 2.1rem;
+            font-size: 2rem;
             width: 50%;
+        }
+    }
+    &__user{
+        transition: all .2s;
+        &:hover{
+            width: 65%;
+            font-size: 2.4rem;
+        }
+    }
+    &__company{
+        transition: all .2s;
+        &:hover{
+            width: 65%;
+            font-size: 2.4rem;
         }
     }
     &__form{
@@ -16,5 +30,6 @@
         font-size: 2rem;
         padding: 2rem;
         box-sizing: border-box;
+        box-shadow: -.5rem 0 4rem rgba(black, .2);
     }
 }
