@@ -18,7 +18,7 @@ const SignUp = () => {
                 >
                   <h2 className='sign-up__user--header'
                   style={{
-                    borderBottom: '3.5px solid #1c87a9',
+                    borderBottom: '3.5px solid rgb(36, 148, 184)',
                     color: 'white',
                     display: 'flex',
                     alignSelf: 'stretch',
@@ -47,7 +47,7 @@ const SignUp = () => {
                 >
                     <h2 className='sign-up__company--header' 
                       style={{
-                        borderBottom: '3.5px solid #1c87a9',
+                        borderBottom: '3.5px solid rgb(36, 148, 184)',
                         color: 'white',
                         display: 'flex',
                         alignSelf: 'stretch',

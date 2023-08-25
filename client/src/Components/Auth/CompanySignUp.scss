@@ -1,3 +1,4 @@
+@import '../../styles/variables';
 .company-registration{
     & h1{
         margin: 0 0 2rem 0;
@@ -10,18 +11,16 @@
         & label{
             display: block;
         }
-        & input{
+        & input, &--contactnum{
             width: 100%;
-            // height: 5rem;
             font-size: 1.5rem;
             font-family: inherit;
             padding: 1.5rem 2rem;
             border: none;
             box-sizing: border-box;
-            border-radius: 2px;
+            border-radius: 10px;
             border-bottom: 3px solid transparent;  
-            box-shadow: 0 .5rem 4rem rgba(black, .2);
-            transition: all .2s;
+            background-color: $color-primary-light;
             &:focus{
                 outline: none;
                 border-bottom: 3px solid rgba(201, 72, 201, 0.978);
@@ -30,19 +29,19 @@
                 border-bottom: 3px solid rgb(251, 147, 124);
             }
         }
-    } 
-    &__submit{
-        display: flex;
-        justify-content: center;
-        &--btn{
-            padding: 1.2rem  3rem;
-            font-family: inherit;
-            font-size: 2rem;
-            background-color: rgb(207, 11, 207);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
     }
+    // &__submit{
+    //     display: flex;
+    //     justify-content: center;
+    //     &--btn{
+    //         padding: 1rem  5rem;
+    //         font-family: inherit;
+    //         font-size: 2rem;
+    //         background-color: rgb(36, 148, 184);
+    //         color: white;
+    //         border: none;
+    //         border-radius: 10px;
+    //         cursor: pointer;
+    //     }
+    // }
 }

@@ -25,7 +25,6 @@ const CompanySignUp = () => {
   }
   return (
     <div className='company-registration'>
-        <h1>Company registration!</h1>
         <form className='form' onSubmit={e=>onSubmit(e)}>
           <div className='form__input'>
             <label for='name' className='form__input--label'>Enter company's name</label>

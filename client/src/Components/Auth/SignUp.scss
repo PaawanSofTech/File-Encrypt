@@ -1,25 +1,33 @@
 @import '../../styles/variables';
 .sign-up{
-    max-width: 60%;
-    margin: 2rem 0;
+    max-width: 40%;
+    margin: 2rem 5rem 0 auto;
     font-size: 1.5rem;
     box-sizing: border-box;
-    margin: 0 auto;
-    box-shadow: 1rem 0 4rem rgba(black, .2);
-    background-image: linear-gradient(to bottom, $color-form-light 50%, $color-form-dark 100%);
+    // text-align: center;
+    box-shadow: .1rem 0 1rem rgba(black, .2);
     border-radius: 10px;
     &__header{
         display: flex;
         justify-content: center;
         margin: 3rem auto;
         height: 6rem;
+        font-size: 1.5rem;
         & button{
+            letter-spacing: 1px;
+            font-weight: 400;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
-            & > *{
-                width:75%;
+            & h2:hover{
+                transform: translateY(-1px);
+                border-bottom: 2px solid rgb(36, 148, 184);
+                color: white;
+                display: flex;
+                align-self: stretch;
+                justify-content: center;
+                align-items: center;
             }
         }
     }
