@@ -1,40 +1,42 @@
+@import '../../styles/variables';
 .sign-up{
-    // border: 2px solid black;
-    box-shadow: (1rem 1rem  9rem rgba(black, .1)), (-1rem -1rem 9rem rgba(black, .1));
+    max-width: 60%;
+    margin: 2rem 0;
+    font-size: 1.5rem;
+    box-sizing: border-box;
     margin: 0 auto;
-    max-width: 70%;
-    border-radius: 3rem;
+    box-shadow: 1rem 0 4rem rgba(black, .2);
+    background-image: linear-gradient(to bottom, $color-form-light 50%, $color-form-dark 100%);
+    border-radius: 10px;
     &__header{
         display: flex;
-        cursor: pointer;
-        &>* {
-            text-align: center;
-            font-size: 2rem;
-            width: 50%;
-            border-bottom: 3px solid rgb(233, 232, 232);
+        justify-content: center;
+        margin: 3rem auto;
+        height: 6rem;
+        & button{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            & > *{
+                width:75%;
+            }
         }
     }
     &__user{
-        transition: all .1s;
-        &:hover{
-            width: 65%;
-            font-size: 2.4rem;
-            box-shadow: 1rem 1rem 7rem rgba(black, .2);
-        }
+        padding: 0 5rem;
     }
     &__company{
-        transition: all .1s;
-        &:hover{
-            width: 65%;
-            font-size: 2.4rem;
-            box-shadow: -1rem 1rem 7rem rgba(black, .2);
-        }
+        padding: 0 5rem;
     }
     &__form{
-        width: 100%;
-        font-size: 1.5rem;
-        padding: 1.5rem;
-        box-sizing: border-box;
-
+        & > *{
+            padding: 1.5rem;
+            width: 100%;
+        }
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+
 }

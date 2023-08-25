@@ -1,11 +1,10 @@
 import React from 'react'
-
+import './Homepage.scss'
 const Homepage = () => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
-      <div className='navbar' style={{display: 'flex', justifyContent: 'space-between', alignItems:'center'}}>
-        <div className='navbar__left'></div>
+      <div className='navbar'>
         <div className='navbar__center'>
           <h1 className='navbar__center--brand'>Group Project</h1>
         </div>

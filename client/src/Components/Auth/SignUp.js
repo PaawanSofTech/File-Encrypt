@@ -8,24 +8,73 @@ const SignUp = () => {
     return (
         <div className='sign-up'>
             <div className='sign-up__header'>
-                <div className='sign-up__user' onClick={()=>{
+              {isUser ? <>
+                <button 
+                  className='sign-up__user' 
+                  onClick={()=>{
                     setIsUser(true)
                     setIsCompany(false)
-                }}>
-                    <h2 className='sign-up__user--header'>User registration</h2>
-                </div>
-                <div className='sign-up__company' onClick={()=>{
+                  }}
+                >
+                  <h2 className='sign-up__user--header'
+                  style={{
+                    borderBottom: '3.5px solid #1c87a9',
+                    color: 'white',
+                    display: 'flex',
+                    alignSelf: 'stretch',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>User registration</h2>
+                </button>
+              </> : <>
+              <button 
+                  className='sign-up__user' 
+                  onClick={()=>{
+                    setIsUser(true)
+                    setIsCompany(false)
+                  }}
+                >
+                  <h2 className='sign-up__user--header'>User registration</h2>
+                </button>
+              </>}
+              {isCompany ? <>
+                <button 
+                  className='sign-up__company' 
+                  onClick={()=>{
                     setIsUser(false)
                     setIsCompany(true)
-                }}>
+                  }}
+                >
+                    <h2 className='sign-up__company--header' 
+                      style={{
+                        borderBottom: '3.5px solid #1c87a9',
+                        color: 'white',
+                        display: 'flex',
+                        alignSelf: 'stretch',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      Company registration</h2>
+                </button>
+              </> : <>
+                <button 
+                  className='sign-up__company' 
+                  onClick={()=>{
+                    setIsUser(false)
+                    setIsCompany(true)
+                  }}
+                  
+                >
                     <h2 className='sign-up__company--header'>Company registration</h2>
-                </div>
+                </button>
+              </>}
             </div>
             <div className='sign-up__form'>
                 {isUser ? <UserSignUp/>: <></>}
                 {isCompany ? <CompanySignUp/>: <></>}
             </div>
         </div>
+
   )
 }
 

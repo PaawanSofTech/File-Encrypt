@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '../src/styles/_variables.scss';
+
+body{
+    background-image: linear-gradient(to bottom, $color-primary-light, $color-primary-dark );
+    background-size: cover;
+    height: 100vh;
+    color: rgb(211, 211, 211);
+}

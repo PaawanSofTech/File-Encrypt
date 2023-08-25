@@ -18,9 +18,11 @@
             padding: 1.5rem 2rem;
             border: none;
             box-sizing: border-box;
-            border-radius: 2px;
+            border-radius: 5px;
             border-bottom: 3px solid transparent;  
             box-shadow: 0 .5rem 4rem rgba(black, .2);
+            background-image: linear-gradient(to right, rgb(62, 75, 135), rgb(45, 55, 101));
+
             transition: all .2s;
             &:focus{
                 outline: none;
