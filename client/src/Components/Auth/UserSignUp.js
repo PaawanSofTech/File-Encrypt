@@ -28,22 +28,24 @@ const UserSignUp = () => {
         <form className='form' onSubmit={e=>onSubmit(e)}>
           <div className='form__input'>
             <label for='name' className='form__input--label'>Enter your name</label>
-            <input className='form__input--name' id='name' type='text' onChange={(e)=>setName(e.target.value)}/>
+            <input required className='form__input--name' id='name' type='text' placeholder='Name' onChange={(e)=>setName(e.target.value)}/>
           </div>
           <div className='form__input'>
             <label for='image' className='form__input--label'>Upload your profile image</label>
             <img src={image} alt='Profile pic' className='form__input--profile-pict'/>
-            <input className='form__input--image' id='image' type='file' accept='image/*' onChange={(e)=>onChangeProfilePict(e)}/>
+            <input required  className='form__input--image' id='image' type='file' accept='image/*' onChange={(e)=>onChangeProfilePict(e)}/>
           </div>
           <div className='form__input'>
             <label for='date' className='form__input--label'>Enter your DOB</label>
-            <input className='form__input--date' id='date' type='date' onChange={(e)=>setDate(e.target.value)}/>
+            <input required  className='form__input--date' id='date' type='date' placeholder='DOB' onChange={(e)=>setDate(e.target.value)}/>
           </div>
           <div className='form__input'>
             <label for='number' className='form__input--label'>Enter your phone number</label>
-            <input className='form__input--contactnum' id='number' type='number' onChange={(e)=>setContactNum(e.target.value)}/>
+            <input required className='form__input--contactnum' id='number' type='number' placeholder='Phone number' onChange={(e)=>setContactNum(e.target.value)}/>
           </div>
-          <button>Submit</button>
+          <div className='form__submit'>
+            <button className='form__submit--btn'>Submit</button>
+          </div>
         </form>
     </div>
   )

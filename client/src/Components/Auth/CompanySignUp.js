@@ -29,22 +29,24 @@ const CompanySignUp = () => {
         <form className='form' onSubmit={e=>onSubmit(e)}>
           <div className='form__input'>
             <label for='name' className='form__input--label'>Enter company's name</label>
-            <input className='form__input--name' id='name' type='text' onChange={(e)=>setName(e.target.value)}/>
+            <input required className='form__input--name' id='name' type='text' onChange={(e)=>setName(e.target.value)} placeholder='Company name'/>
           </div>
           <div className='form__input'>
             <label for='image' className='form__input--label'>Upload your company's image</label>
             <img src={image} alt='Profile pic' className='form__input--profile-pict'/>
-            <input className='form__input--image' id='image' type='file' accept='image/*' onChange={(e)=>onChangeProfilePict(e)}/>
+            <input required className='form__input--image' id='image' type='file' accept='image/*' onChange={(e)=>onChangeProfilePict(e)} />
           </div>
           <div className='form__input'>
             <label for='regId' className='form__input--label'>Enter your company's Registration ID</label>
-            <input className='form__input--reg' id='regId' type='text' onChange={(e)=>setRegId(e.target.value)}/>
+            <input required className='form__input--reg' id='regId' type='text' placeholder='Registration Id' onChange={(e)=>setRegId(e.target.value)}/>
           </div>
           <div className='form__input'>
             <label for='number' className='form__input--label'>Enter your company's phone number</label>
-            <input className='form__input--contactnum' id='number' type='number' onChange={(e)=>setContactNum(e.target.value)}/>
+            <input required className='form__input--contactnum' id='number' type='number' placeholder="Company's contact number" onChange={(e)=>setContactNum(e.target.value)}/>
           </div>
-          <button>Submit</button>
+          <div className='form__submit'>
+            <button className='form__submit--btn'>Submit</button>
+          </div>
         </form>
     </div>
   )

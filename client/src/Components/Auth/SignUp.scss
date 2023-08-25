@@ -1,7 +1,9 @@
 .sign-up{
-    border: 3px solid black;
+    // border: 2px solid black;
+    box-shadow: (1rem 1rem  9rem rgba(black, .1)), (-1rem -1rem 9rem rgba(black, .1));
     margin: 0 auto;
     max-width: 70%;
+    border-radius: 3rem;
     &__header{
         display: flex;
         cursor: pointer;
@@ -9,27 +11,30 @@
             text-align: center;
             font-size: 2rem;
             width: 50%;
+            border-bottom: 3px solid rgb(233, 232, 232);
         }
     }
     &__user{
-        transition: all .2s;
+        transition: all .1s;
         &:hover{
             width: 65%;
             font-size: 2.4rem;
+            box-shadow: 1rem 1rem 7rem rgba(black, .2);
         }
     }
     &__company{
-        transition: all .2s;
+        transition: all .1s;
         &:hover{
             width: 65%;
             font-size: 2.4rem;
+            box-shadow: -1rem 1rem 7rem rgba(black, .2);
         }
     }
     &__form{
         width: 100%;
-        font-size: 2rem;
-        padding: 2rem;
+        font-size: 1.5rem;
+        padding: 1.5rem;
         box-sizing: border-box;
-        box-shadow: -.5rem 0 4rem rgba(black, .2);
+
     }
 }
