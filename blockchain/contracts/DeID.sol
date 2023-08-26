@@ -15,7 +15,7 @@ contract DeID{
     }
     
     struct User{
-        uint128 DOB;
+        string DOB;
         uint64 _foldCount;
         uint64 Phone;
         address Address;
@@ -74,7 +74,7 @@ contract DeID{
 
     //add documents for company also!
 
-    function createUser(uint128 DOB,uint64 Phone,string calldata Name,string calldata Image) public{
+    function createUser(string calldata DOB,uint64 Phone,string calldata Name,string calldata Image) public{
         require(userRegistered[msg.sender] == false,"User Already Registered");
         require(companyRegistered[msg.sender] == false,"Registered as company");
         bytes32 _val = keccak256(abi.encodePacked(msg.sender));

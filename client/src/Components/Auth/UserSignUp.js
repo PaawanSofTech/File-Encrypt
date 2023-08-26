@@ -3,7 +3,8 @@ import { convToBase64 } from '../Helpers/convToBase64';
 import './UserSignUp.scss';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'
-const UserSignUp = () => {
+import {ethers} from "ethers";
+const UserSignUp = ({contract}) => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [date, setDate] = useState('');
@@ -20,16 +21,14 @@ const UserSignUp = () => {
       setImage('')
     }
 } 
-  const onSubmit = (e) =>{
+  const onSubmit = async(e) =>{
     e.preventDefault()
-    let newUser = {
-      Name: name,
-      Image: image,
-      Phone: contactNum,
-      DOB: date
-    }
-    console.log(newUser)
-    //axios request to post 
+    try {
+      const res = await contract.createUser(date,contactNum,name,image); 
+      console.log("Response",res);
+    } catch (error) {
+      console.log("Error",error);
+    } 
   }
   return (
     <div className='user-registration'>

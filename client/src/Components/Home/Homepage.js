@@ -1,12 +1,15 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import './Homepage.scss'
 import { ethers } from 'ethers';
+import SignUp from '../Auth/SignUp';
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json"
-const Homepage = () => {
-  const [connected, setconnected] = useState(false);
-  const [contract, setcontract] = useState(null);
+const Homepage = ({setconnected}) => {
+  const [connect, setconnect] = useState(false);
   const [provider, setprovider] = useState(null);
-  const [account, setaccount] = useState(null);
+  const [accounts, setaccounts] = useState(null);
+  const [contract, setcontract] = useState(null);
+  const [userDetails, setuserDetails] = useState(null);
+  const [registered, setregistered] = useState(true);
   const connectFetch = async () => {
     const loadProvider = async (provider) => {
         if (provider) {
@@ -47,7 +50,7 @@ const Homepage = () => {
             await provider.send("eth_requestAccounts", []);
             const signer = provider.getSigner();
             const address = await signer.getAddress();
-            setaccount(address);
+            setaccounts(address);;
             let contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; //mumbai
             const contractInstance = new ethers.Contract(
                 contractAddress,
@@ -55,7 +58,9 @@ const Homepage = () => {
                 signer
             );
             setcontract(contractInstance);
+            console.log("Contract" ,contractInstance);
             setprovider(provider);
+            setconnect(true);
             setconnected(true);
         } else {
             console.error("MetaMask not Installed");
@@ -67,22 +72,37 @@ const Homepage = () => {
     } catch (error) {
         console.error("MetaMask not Installed");
     }
-}
+  }
+  const checkRegistered=async()=>{
+    try {
+      const userData = await contract.userDetails();
+      console.log(userData);
+      setuserDetails(userData);
+      setregistered(true);
+    } catch (error) {
+      console.log("Not Registered");
+      setregistered(false);
+    }
+  }
+  useEffect(()=>{
+    connect && checkRegistered();
+  },[contract])
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
+      {registered ?
       <div className='navbar'>
         <div className='navbar__center'>
           <h1 className='navbar__center--brand'>Group Project</h1>
         </div>
         <div className='navbar__right'>
-          {connected && 
+          {connect && 
           <button className='navbar__right--edit'>
             Edit Profile
           </button>
           }
-          {connected ? 
-          <button className='truncate max-w-[230px] navbar__right--connect'>Account : {account}</button>
+          {connect ? 
+          <button className='truncate max-w-[230px] navbar__right--connect'>accounts : {accounts}</button>
           :
           <button onClick={connectFetch} className='navbar__right--connect'>
             Connect
@@ -90,6 +110,9 @@ const Homepage = () => {
         }
         </div>
       </div>
+      : 
+      <SignUp contract={contract}/>
+    }
 
 
     </div>
