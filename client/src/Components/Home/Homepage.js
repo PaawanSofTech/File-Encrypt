@@ -3,6 +3,8 @@ import './Homepage.scss'
 import { ethers } from 'ethers';
 import SignUp from '../Auth/SignUp';
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json"
+import { IoMdFolder } from 'react-icons/io';
+import Documents from './Documents';
 const Homepage = ({setconnected}) => {
   const [connect, setconnect] = useState(false);
   const [provider, setprovider] = useState(null);
@@ -112,21 +114,59 @@ const Homepage = ({setconnected}) => {
         }
         </div>
       </div>
-      <div className='row-1'>
-        <div className='column'></div>
-        <div className='column'></div>
-        <div className='column'></div>
+      <div className='row'>
+        <div className='row__1'>
+          <div className='row__header'>
+            <div className='row__title'>My folders</div>
+            <button className='row__btn'>View all <span>&rarr;</span></button>
+          </div>
+          <div className='row__sections'>
+            <div className='column'>
+              <div className='column__header'>
+                <IoMdFolder className='column__folder-icon' size={'200'} />
+                <div className='column__folder-name'>Medical</div>
+              </div>
+              <div className='column__details'>
+
+              </div>
+            </div>
+            <div className='column'>
+              <div className='column__header'>
+                <IoMdFolder className='column__folder-icon' size={'200'} fill='#0a2c3f'/>
+                <div className='column__folder-name'>Academics</div>
+              </div>
+            </div>
+            <div className='column'>
+              <div className='column__header'>
+                <IoMdFolder className='column__folder-icon' size={'200'} fill='#0a2c3f'/>
+                <div className='column__folder-name'>Financial</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='row__2'>
+          <div className='row__header'>
+            <div className='row__title'>Analytics</div>
+          </div>
+          <div className='row__sections'>
+            <div className='column'></div>
+            <div className='column'></div>
+            <div className='column'></div>
+          </div>
+        </div>
+        <div className='row__3'>
+          <div className='row__header'>
+            <div className='row__title'>History</div>
+            <button className='row__btn'>View all <span>&rarr;</span></button>
+          </div>
+          <div className='row__sections'>
+            <div className='column'></div>
+            <div className='column'></div>
+            <div className='column'></div>
+          </div>
+        </div>
       </div>
-      <div className='row-2'>
-        <div className='column'></div>
-        <div className='column'></div>
-        <div className='column'></div>
-      </div>
-      <div className='row-3'>
-        <div className='column'></div>
-        <div className='column'></div>
-        <div className='column'></div>
-      </div>
+      <Documents/>
       </>
       : 
       <SignUp contract={contract}/>
