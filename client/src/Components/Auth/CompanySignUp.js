@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 import './CompanySignUp.scss'
 import {convToBase64} from '../Helpers/convToBase64.js'
-
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 const CompanySignUp = () => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
@@ -12,7 +13,6 @@ const CompanySignUp = () => {
   const onChangeProfilePict = async (e) => {
     if(e?.target?.files[0]){
       setImage()
-      // setButtonText('Loading...')
       const dataPict = await convToBase64(e.target.files[0])
       setImage(dataPict)
       setButtonText('Remove image')
@@ -63,35 +63,34 @@ const CompanySignUp = () => {
           />
           </div>
           <div className='form__input'>
-            <label for='name' className='form__input--label'>Enter your name</label>
-            <input 
-              required 
-              className='form__input--name' 
-              id='name' 
-              type='text' 
-              placeholder='Name'
-              value={name}
+            <label for='number' className='form__input--label'>Enter your phone number</label>
+            <PhoneInput 
+              inputStyle={{ backgroundColor: '#0a2c3f' }}
+              dropdownStyle={{ backgroundColor: '#0a2c3f' }}
+              buttonStyle={{ backgroundColor: '#0a2c3f' }}
+              country={'in'}
+              className='form__input--contactnum' 
+              id='number' 
+              type='number' 
               autoComplete={'off'}
-              onChange={(e)=>setName(e.target.value)}
-          />
+
+              placeholder='Phone number'
+              value={contactNum}
+              onChange={(phone)=>setContactNum(phone)}
+            />
           </div>
-          {/* <div className='form__input'>
-            <label for='image' className='form__input--label'>Upload your company's image</label>
-            <img src={image} alt='Profile pic' className='form__input--profile-pict'/>
-            <input required className='form__input--image' id='image' type='file' accept='image/*' onChange={(e)=>onChangeProfilePict(e)} />
-          </div> */}
           <div className='form__input form__input--upload-image'>
             {image ? <>
               <img src={image} alt='Profile pic' className='form__input--profile-pict'/>
             </>:<>
             </>}
-            {buttonText === 'Upload your profile image' ? <>
+            {buttonText === "Upload your company's image" ? <>
               <label for='image' className='form__input--label-upload '>{buttonText}</label>
             </> : <>
               <button for='image' className='form__input--label-remove' onClick={(e)=>{
                 e.preventDefault()
                 onChangeProfilePict()
-                setButtonText('Upload your profile image')
+                setButtonText("Upload your company's image")
                 }}>{buttonText}</button>
             </>}
             <input 
@@ -104,12 +103,6 @@ const CompanySignUp = () => {
               onChange={(e)=>onChangeProfilePict(e)}
               hidden={true}
             />
-          </div>
-          <div className='form__input'>
-          </div>
-          <div className='form__input'>
-            <label for='number' className='form__input--label'>Enter your company's phone number</label>
-            <input required className='form__input--contactnum' id='number' type='number' placeholder="Company's contact number" onChange={(e)=>setContactNum(e.target.value)}/>
           </div>
           <div className='form__submit'>
             <button className='form__submit--btn'>Submit</button>

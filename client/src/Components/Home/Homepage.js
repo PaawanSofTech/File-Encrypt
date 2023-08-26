@@ -90,7 +90,9 @@ const Homepage = ({setconnected}) => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
-      {registered ?
+      {
+      registered ?
+      <>
       <div className='navbar'>
         <div className='navbar__center'>
           <h1 className='navbar__center--brand'>Group Project</h1>
@@ -110,6 +112,22 @@ const Homepage = ({setconnected}) => {
         }
         </div>
       </div>
+      <div className='row-1'>
+        <div className='column'></div>
+        <div className='column'></div>
+        <div className='column'></div>
+      </div>
+      <div className='row-2'>
+        <div className='column'></div>
+        <div className='column'></div>
+        <div className='column'></div>
+      </div>
+      <div className='row-3'>
+        <div className='column'></div>
+        <div className='column'></div>
+        <div className='column'></div>
+      </div>
+      </>
       : 
       <SignUp contract={contract}/>
     }
