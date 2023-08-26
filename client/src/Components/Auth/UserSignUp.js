@@ -8,10 +8,17 @@ const UserSignUp = () => {
   const [image, setImage] = useState('');
   const [date, setDate] = useState('');
   const [contactNum, setContactNum] = useState('');
+  const [buttonText, setButtonText] = useState('Upload your profile image');
   const onChangeProfilePict = async (e) => {
-    setImage()
-    const dataPict = await convToBase64(e.target.files[0])
-    setImage(dataPict)    
+    if(e?.target?.files[0]){
+      setImage()
+      // setButtonText('Loading...')
+      const dataPict = await convToBase64(e.target.files[0])
+      setImage(dataPict)
+      setButtonText('Remove image')
+    }else{
+      setImage('')
+    }
 } 
   const onSubmit = (e) =>{
     e.preventDefault()
@@ -36,22 +43,11 @@ const UserSignUp = () => {
               type='text' 
               placeholder='Name'
               value={name}
+              autoComplete={'off'}
               onChange={(e)=>setName(e.target.value)}
           />
           </div>
-          <div className='form__input'>
-            <label for='image' className='form__input--label'>Upload your profile image</label>
-            <img src={image} alt='Profile pic' className='form__input--profile-pict'/>
-            <input 
-              required 
-              className='form__input--image' 
-              id='image' 
-              type='file' 
-              accept='image/*' 
-              onChange={(e)=>onChangeProfilePict(e)}
-              hidden={true}
-            />
-          </div>
+          
           <div className='form__input'>
             <label for='date' className='form__input--label'>Enter your DOB</label>
             <input 
@@ -59,7 +55,10 @@ const UserSignUp = () => {
               className='form__input--date' 
               id='date' 
               type='date' 
+              defaultValue={''}
               placeholder='DOB' 
+              autoComplete={'off'}
+
               value={date}
               onChange={(e)=>setDate(e.target.value)}
             />
@@ -74,11 +73,39 @@ const UserSignUp = () => {
               className='form__input--contactnum' 
               id='number' 
               type='number' 
+              autoComplete={'off'}
+
               placeholder='Phone number'
               value={contactNum}
               onChange={(phone)=>setContactNum(phone)}
             />
           </div>
+          <div className='form__input form__input--upload-image'>
+            {image ? <>
+              <img src={image} alt='Profile pic' className='form__input--profile-pict'/>
+            </>:<>
+            </>}
+            {buttonText === 'Upload your profile image' ? <>
+              <label for='image' className='form__input--label-upload '>{buttonText}</label>
+            </> : <>
+              <button for='image' className='form__input--label-remove' onClick={(e)=>{
+                e.preventDefault()
+                onChangeProfilePict()
+                setButtonText('Upload your profile image')
+                }}>{buttonText}</button>
+            </>}
+            <input 
+              required 
+              className='form__input--image' 
+              id='image' 
+              type='file' 
+              accept='image/*' 
+              autoComplete={'off'}
+              onChange={(e)=>onChangeProfilePict(e)}
+              hidden={true}
+            />
+          </div>
+
           <div className='form__submit'>
             <button className='form__submit--btn'>Submit</button>
           </div>

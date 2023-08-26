@@ -20,14 +20,17 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            & h2:hover{
-                transform: translateY(-1px);
-                border-bottom: 2px solid rgb(36, 148, 184);
-                color: white;
+            & h2{
+                height: 100%;
                 display: flex;
-                align-self: stretch;
                 justify-content: center;
                 align-items: center;
+                transition: all .05s;
+                &:hover{
+                    transform: translateY(-1px);
+                    border-bottom: 2px solid rgb(36, 148, 184);
+                    color: white;
+                }
             }
         }
     }
