@@ -6,7 +6,8 @@
 body{
     background-image: linear-gradient(to bottom, $color-primary-light, $color-primary-dark );
     background-size: cover;
-    height: 100vh;
+    background-attachment: fixed;
+    height: 100%;
     color: rgb(211, 211, 211);
     font-weight: 300;
 }

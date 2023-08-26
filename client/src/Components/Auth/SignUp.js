@@ -18,12 +18,14 @@ const SignUp = () => {
                 >
                   <h2 className='sign-up__user--header'
                   style={{
+                    width: '100%',
                     borderBottom: '3.5px solid rgb(36, 148, 184)',
                     color: 'white',
                     display: 'flex',
                     alignSelf: 'stretch',
                     justifyContent: 'center',
                     alignItems: 'center',
+                  transition: 'all .1s',
                   }}>User registration</h2>
                 </button>
               </> : <>
@@ -47,13 +49,16 @@ const SignUp = () => {
                 >
                     <h2 className='sign-up__company--header' 
                       style={{
+                        width: '100%',
                         borderBottom: '3.5px solid rgb(36, 148, 184)',
                         color: 'white',
                         display: 'flex',
                         alignSelf: 'stretch',
                         justifyContent: 'center',
                         alignItems: 'center',
-                      }}>
+                        transition: 'all .1s',
+                      }}
+                      >
                       Company registration</h2>
                 </button>
               </> : <>
@@ -62,8 +67,7 @@ const SignUp = () => {
                   onClick={()=>{
                     setIsUser(false)
                     setIsCompany(true)
-                  }}
-                  
+                  }}                  
                 >
                     <h2 className='sign-up__company--header'>Company registration</h2>
                 </button>
