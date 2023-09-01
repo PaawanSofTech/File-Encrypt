@@ -3,7 +3,7 @@ import './CompanySignUp.scss'
 import {convToBase64} from '../Helpers/convToBase64.js'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-const CompanySignUp = () => {
+const CompanySignUp = ({contract}) => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [regId, setRegId] = useState('');
@@ -20,15 +20,15 @@ const CompanySignUp = () => {
       setImage('')
     }
 } 
-  const onSubmit = (e) =>{
+  const onSubmit = async(e) =>{
     e.preventDefault()
-    let newCompany = {
-      Name: name,
-      Image: image,
-      Phone: contactNum,
-      RegistrationId: regId
+    try {
+      console.log("Vals",contactNum,regId, name, image);
+      const res = await contract.createCompany(contactNum,regId, name, image);
+      console.log(res);
+    } catch (error) {
+      console.log("Error",error);
     }
-    console.log(newCompany)
     //axios request to post 
   }
   return (
@@ -94,7 +94,6 @@ const CompanySignUp = () => {
                 }}>{buttonText}</button>
             </>}
             <input 
-              required 
               className='form__input--image' 
               id='image' 
               type='file' 

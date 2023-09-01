@@ -33,7 +33,7 @@ contract DeID{
 
     struct Company{
         uint64 Phone;
-        uint64 RegistrationId;
+        string RegistrationId;
         string Name;
         string Image;
         string[] Employee;
@@ -105,7 +105,7 @@ contract DeID{
         return userDocs[keccak256(abi.encodePacked(msg.sender))][_id];
     }
 
-    function createCompany(uint64 Phone,uint64 RegistrationId,string calldata Name,string calldata Image) public{
+    function createCompany(uint64 Phone,string calldata RegistrationId,string calldata Name,string calldata Image) public{
         require(userRegistered[msg.sender] == false,"Company Already Registered");
         require(companyRegistered[msg.sender] == false,"Registered as User");
         bytes32 _val = keccak256(abi.encodePacked(msg.sender));
@@ -185,6 +185,16 @@ contract DeID{
         require(companyRegistered[msg.sender],"Not a Registered Company");
         require(companyAccess[msg.sender][Address],"You Don't Have Access to User");
         return companyDocs[keccak256(abi.encodePacked(msg.sender))][Address];
+    }
+
+    function ifRegistered() public view returns(uint) {
+        if(userRegistered[msg.sender]){
+            return 0;
+        }else if(companyRegistered[msg.sender]){
+            return 1;
+        } else{
+            return 2;
+        }
     }
 
     function revokeAccess(address Address) public {

@@ -2,16 +2,23 @@ import React,{useEffect, useState} from 'react'
 import './Homepage.scss'
 import { ethers } from 'ethers';
 import SignUp from '../Auth/SignUp';
+import { PiUserCircle } from 'react-icons/pi';
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json"
-import { IoMdFolder } from 'react-icons/io';
 import Documents from './Documents';
+import Folder from '../Cards/Folder';
 const Homepage = ({setconnected}) => {
   const [connect, setconnect] = useState(false);
   const [provider, setprovider] = useState(null);
   const [accounts, setaccounts] = useState(null);
   const [contract, setcontract] = useState(null);
+  const [isuser, setisuser] = useState(false);
+  const [folders, setfolders] = useState(null);
+  const [folderclosed, setfolderclosed] = useState(true);
   const [userDetails, setuserDetails] = useState(null);
   const [registered, setregistered] = useState(true);
+  const [fetched, setfetched] = useState(false);
+  const [docs, setdocs] = useState(null);
+  const [val, setval] = useState(0);
   const connectFetch = async () => {
     const loadProvider = async (provider) => {
         if (provider) {
@@ -22,38 +29,38 @@ const Homepage = ({setconnected}) => {
                 loadProvider(provider);
             });
             const { ethereum } = window;
-            // try {
-            //     await ethereum.request({
-            //         method: 'wallet_switchEthereumChain',
-            //         params: [{ chainId: '0x13881' }],
-            //     });
-            // } catch (switchError) {
-            //     // This error code indicates that the chain has not been added to MetaMask.
-            //     if (switchError.code === 4902) {
-            //         // Do something
-            //         window.ethereum.request({
-            //             method: 'wallet_addEthereumChain',
-            //             params: [{
-            //                 chainId: '0x13881',
-            //                 chainName: 'Polygon',
-            //                 nativeCurrency: {
-            //                     name: 'Mumbai',
-            //                     symbol: 'MATIC',
-            //                     decimals: 18
-            //                 },
-            //                 rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
-            //                 blockExplorerUrls: ['https://mumbai.polygonscan.com']
-            //             }]
-            //         })
-            //             .catch((error) => {
-            //             });
-            //     }
-            // }
+            try {
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x13881' }],
+                });
+            } catch (switchError) {
+                // This error code indicates that the chain has not been added to MetaMask.
+                if (switchError.code === 4902) {
+                    // Do something
+                    window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x13881',
+                            chainName: 'Polygon',
+                            nativeCurrency: {
+                                name: 'Mumbai',
+                                symbol: 'MATIC',
+                                decimals: 18
+                            },
+                            rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
+                            blockExplorerUrls: ['https://mumbai.polygonscan.com']
+                        }]
+                    })
+                        .catch((error) => {
+                        });
+                }
+            }
             await provider.send("eth_requestAccounts", []);
             const signer = provider.getSigner();
             const address = await signer.getAddress();
-            setaccounts(address);;
-            let contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; //mumbai
+            setaccounts(address);
+            let contractAddress = "0xc182C4Ee6D85E0E99DB147908ac3F59cff02973b"; //mumbai
             const contractInstance = new ethers.Contract(
                 contractAddress,
                 DeID.abi,
@@ -77,13 +84,42 @@ const Homepage = ({setconnected}) => {
   }
   const checkRegistered=async()=>{
     try {
-      const userData = await contract.userDetails();
-      console.log(userData);
-      setuserDetails(userData);
-      setregistered(true);
+      const res = await contract.ifRegistered();
+      console.log("Response",res);
+      const mssg = JSON.parse(JSON.stringify(res));
+      var val = parseInt(mssg.hex, 16);
+      console.log("time",val);
+      if(val ===0){
+        const userData = await contract.userDetails();
+        console.log(userData);
+        setuserDetails(userData);
+        setfolders(userData.Folders)
+        setfetched(true);
+        setisuser(true);
+        setregistered(true);
+      } else if(val ===1){
+        const userData = await contract.companyDetails(accounts);
+        setuserDetails(userData);
+        setfetched(true);
+        setregistered(true);
+      } else{
+        console.log("Not Registered");
+        setregistered(false);
+      }
     } catch (error) {
-      console.log("Not Registered");
+      console.log("Not Registered",error);
       setregistered(false);
+    }
+  }
+  const openFolder=async(i)=>{
+    try {
+      const res = await contract.returnDocs(i);
+      console.log(res);
+      setval(i);
+      setdocs(res);
+      setfolderclosed(false);
+    } catch (error) {
+      console.log("Error");
     }
   }
   useEffect(()=>{
@@ -95,7 +131,19 @@ const Homepage = ({setconnected}) => {
       {
       registered ?
       <>
-      <div className='navbar'>
+      <div className='flex navbar'>
+        {fetched && 
+        <div className='flex absolute left-6  items-center flex-row text-3xl'>
+          { userDetails.Image.length ===0 ? 
+          <PiUserCircle size={37} className='ml-6'/>
+          :
+          <img src={userDetails.Image} alt='Profile' className='max-h-[37px] ml-6'/>
+          }
+          <p className='ml-4'>
+          {userDetails.Name}
+          </p>
+        </div>
+        }
         <div className='navbar__center'>
           <h1 className='navbar__center--brand'>Group Project</h1>
         </div>
@@ -114,59 +162,54 @@ const Homepage = ({setconnected}) => {
         }
         </div>
       </div>
-      <div className='row'>
-        <div className='row__1'>
-          <div className='row__header'>
-            <div className='row__title'>My folders</div>
-            <button className='row__btn'>View all <span>&rarr;</span></button>
+      { isuser && <div>
+      {folderclosed ? 
+      <div>
+        {fetched && 
+        <div className='row'>
+          <div className='row__1'>
+            <div className='row__header'>
+              <div className='row__title'>My folders</div>
+              <button className='row__btn'>View all <span>&rarr;</span></button>
+            </div>
+            <div className='row__sections'>
+              {folders.map((folder,i)=>{
+                return(
+                  <div onClick={()=>{openFolder(i)}}>
+                    <Folder contract={contract} folder={folder} />
+                  </div>
+                )
+              })}
+            </div>
           </div>
-          <div className='row__sections'>
-            <div className='column'>
-              <div className='column__header'>
-                <IoMdFolder className='column__folder-icon' size={'200'} />
-                <div className='column__folder-name'>Medical</div>
-              </div>
-              <div className='column__details'>
-
-              </div>
+          <div className='row__2'>
+            <div className='row__header'>
+              <div className='row__title'>Requests</div>
             </div>
-            <div className='column'>
-              <div className='column__header'>
-                <IoMdFolder className='column__folder-icon' size={'200'} fill='#0a2c3f'/>
-                <div className='column__folder-name'>Academics</div>
-              </div>
+            <div className='row__sections'>
+              <div className='column'></div>
+              <div className='column'></div>
+              <div className='column'></div>
             </div>
-            <div className='column'>
-              <div className='column__header'>
-                <IoMdFolder className='column__folder-icon' size={'200'} fill='#0a2c3f'/>
-                <div className='column__folder-name'>Financial</div>
-              </div>
+          </div>
+          <div className='row__3'>
+            <div className='row__header'>
+              <div className='row__title'>History</div>
+              <button className='row__btn'>View all <span>&rarr;</span></button>
+            </div>
+            <div className='row__sections'>
+              <div className='column'></div>
+              <div className='column'></div>
+              <div className='column'></div>
             </div>
           </div>
         </div>
-        <div className='row__2'>
-          <div className='row__header'>
-            <div className='row__title'>Analytics</div>
-          </div>
-          <div className='row__sections'>
-            <div className='column'></div>
-            <div className='column'></div>
-            <div className='column'></div>
-          </div>
-        </div>
-        <div className='row__3'>
-          <div className='row__header'>
-            <div className='row__title'>History</div>
-            <button className='row__btn'>View all <span>&rarr;</span></button>
-          </div>
-          <div className='row__sections'>
-            <div className='column'></div>
-            <div className='column'></div>
-            <div className='column'></div>
-          </div>
-        </div>
+        }
       </div>
-      <Documents/>
+      :
+      <Documents val={val} setfolderclosed={setfolderclosed} name={folders[val]} contract={contract} docs={docs} /> 
+      }
+      </div>}
       </>
       : 
       <SignUp contract={contract}/>

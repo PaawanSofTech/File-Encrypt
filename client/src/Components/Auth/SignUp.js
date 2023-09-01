@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import UserSignUp from './UserSignUp.js'
 import CompanySignUp from './CompanySignUp.js'
 import './SignUp.scss'
-import {ethers} from "ethers";
 const SignUp = ({contract}) => {
     const [isUser, setIsUser] = useState(true);
     const [isCompany, setIsCompany] = useState(false);

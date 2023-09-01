@@ -3,7 +3,6 @@ import { convToBase64 } from '../Helpers/convToBase64';
 import './UserSignUp.scss';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'
-import {ethers} from "ethers";
 const UserSignUp = ({contract}) => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
@@ -24,7 +23,8 @@ const UserSignUp = ({contract}) => {
   const onSubmit = async(e) =>{
     e.preventDefault()
     try {
-      const res = await contract.createUser(date,contactNum,name,image); 
+      const num = Number(contactNum);
+      const res = await contract.createUser(date,num,name,image); 
       console.log("Response",res);
     } catch (error) {
       console.log("Error",error);
@@ -94,7 +94,7 @@ const UserSignUp = ({contract}) => {
                 }}>{buttonText}</button>
             </>}
             <input 
-              required 
+              // required 
               className='form__input--image' 
               id='image' 
               type='file' 
