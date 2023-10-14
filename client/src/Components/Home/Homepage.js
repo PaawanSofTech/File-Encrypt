@@ -164,7 +164,7 @@ const Homepage = ({ setconnected }) => {
             <CompanyPage
               fetched={fetched}
               contract={contract}
-              folders={folders}
+              // folders={folders}
             />
           )}
         </>

@@ -8,11 +8,11 @@ const CompanyPage = ({ contract, fetched, folders }) => {
   const [val, setval] = useState(0);
   const openFolder = async (i) => {
     try {
-      const res = await contract.returnDocs(i);
-      console.log(res);
-      setval(i);
-      setdocs(res);
-      setfolderclosed(false);
+      // const res = await contract.returnDocs(i);
+      // console.log(res);
+      // setval(i);
+      // setdocs(res);
+      // setfolderclosed(false);
     } catch (error) {
       console.log("Error");
     }
@@ -31,7 +31,7 @@ const CompanyPage = ({ contract, fetched, folders }) => {
                   </button>
                 </div>
                 <div className="row__sections">
-                  {folders.map((folder, i) => {
+                  {/* {folders.map((folder, i) => {
                     return (
                       <div
                         onClick={() => {
@@ -41,7 +41,7 @@ const CompanyPage = ({ contract, fetched, folders }) => {
                         <Folder contract={contract} folder={folder} />
                       </div>
                     );
-                  })}
+                  })} */}
                 </div>
               </div>
               <div className="row__2">
