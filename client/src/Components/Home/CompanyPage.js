@@ -25,7 +25,7 @@ const CompanyPage = ({ contract, fetched, folders }) => {
             <div className="row">
               <div className="row__1">
                 <div className="row__header">
-                  <div className="row__title">My folders</div>
+                  <div className="row__title"></div>
                   <button className="row__btn">
                     View all <span>&rarr;</span>
                   </button>
