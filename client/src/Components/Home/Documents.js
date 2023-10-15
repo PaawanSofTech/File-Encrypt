@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react'
+import React, { useState,useRef, useEffect } from 'react'
 import './Documents.scss'
 import {FileUploader} from 'react-drag-drop-files';
 import axios from "axios";
@@ -12,6 +12,8 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
   const [uploading, setuploading] = useState(false);
   const [fileName, setfileName] = useState('');
   const hiddenFileInput = useRef(null);
+  const fileTypes = ["PDF", "DOCX"];
+  useEffect(()=>{},[file])
   const uploadFile = async () => {
     if (file) {
         setuploading(true);
@@ -56,40 +58,43 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
   }
   return (
     <div className='flex-col flex items-center'>
-      <button onClick={()=>{setfolderclosed(true)}} className='mt-12 absolute left-28'>
+      <button onClick={()=>{setfolderclosed(true)}} className=' absolute left-28' style={{marginTop: '4rem'}}>
         <IoIosArrowBack size={37} />
       </button>
-      <div>
-      <p className='text-5xl mt-12'>
-      Documents / {name}
-      </p>
+      <div 
+        style={{
+          // backgroundColor: 'rgba(0, 255, 0, .5)', 
+          // backgroundColor: 'rgba(255,255,255,.2)', 
+          width: 'auto', 
+          margin: '3rem', 
+          padding: '13px 13px', 
+          borderRadius: '500px',
+          // boxShadow: '0rem 0rem 40px 1px rgba(4,8,10,1)'
+          // backdropFilter: 'blur(50px)'
+          }}>
+        <p className='text-5xl'>
+        Documents / {name}
+        </p>
       </div>
     <div className='flex items-center justify-center min-w-full '>
     { docs.length !==0 ? 
-    docs.map((doc,i)=>{
-      return(
-      <div className='mx-12 my-6 documents__column'>
-        <div onClick={()=>{window.open(doc.Hash, '_blank')}} className='document__column--header'>
-          <img className='document__column--header--icon max-w-[240px] max-h-[240px]' alt='document' src={doc.Hash}/>
-          <div className='document__column__header--title'>{time(doc.TimeAdded)}</div>
-        </div>
-      </div>
+      <div style={{display: 'flex',justifyContent: 'center',flexWrap: 'wrap', width: 'auto', overflow: 'auto'}}>
+        {docs.map((doc,i)=>{
+          return(
+            <div className='mx-12 my-6 documents__column'>
+            <div onClick={()=>{
+              window.open(doc.Hash, '_blank') 
+              console.log(doc)}
+            } className='document__column--header' style={{cursor: 'pointer'}}>
+              <img className='document__column--header--icon max-w-[240px] max-h-[240px]' alt='document' src={doc.Hash}/>
+              <div className='document__column__header--title'>{time(doc.TimeAdded)}</div>
+            </div>
+          </div>
       )
-    })
+    })}
+    </div>
       
       :
-    // <div className='documents grid grid-cols-4'>
-    //   {docs.map((doc,i)=>{
-    //     return(
-    //     <div className='mx-12 my-6 documents__column'>
-    //       <div onClick={()=>{window.open(doc.Hash, '_blank')}} className='document__column--header'>
-    //         <img className='document__column--header--icon max-w-[240px] max-h-[240px]' alt='document' src={doc.Hash}/>
-    //         <div className='document__column__header--title'>{time(doc.TimeAdded)}</div>
-    //       </div>
-    //     </div>
-    //     )
-    //   })}
-    // </div>
     <div className='text-5xl mt-36 flex flex-col justify-around items-center h-[200px]'>
     <p className=''>No Files</p>
     <div className='flex items-center flex-row'>
@@ -98,22 +103,7 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
     </div>
   </div>
     }
-    {
-      fileName.length === 0 
-      ? 
-      <>
-      <FileUploader handleChange={retrieveFile} name="file" types={fileTypes} ref={hiddenFileInput}/>
-      </>
-      :
-      <button onClick={uploadFile}  className='fixed bottom-16 flex flex-row  bg-[#0e3851] items-center rounded-full px-9 py-[4px]'>
-      <p className=' text-[2rem] w-[250px] truncate '>{fileName}</p>
-      {uploading ?
-        <BiLoaderAlt className='animate-spin' size={27} />
-      :
-        <FaFileUpload size={27}/>
-      }
-      </button>
-    }
+    
     <input
         disabled={uploading}
         hidden={true}
@@ -126,6 +116,26 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
         onChange={retrieveFile}
     />
     </div>
+    {
+      fileName.length === 0 
+      ? 
+      <div style={{margin:'50px 0px'}}>
+      <FileUploader handleChange={retrieveFile} name="file" types={fileTypes} ref={hiddenFileInput} />
+      </div>
+      :
+      <button 
+        onClick={uploadFile}
+        style={{margin: '50px'}}
+        className='bottom-16 flex flex-row bg-[#0e3851] items-center rounded-full px-9 py-[4px]'
+      >
+      <p className=' text-[2rem] w-[250px] truncate '>{fileName}</p>
+      {uploading ?
+        <BiLoaderAlt className='animate-spin' size={27} />
+      :
+        <FaFileUpload size={27}/>
+      }
+      </button>
+    }
     </div>
   )
 }
