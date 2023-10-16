@@ -4,6 +4,8 @@ import Folder from "../Cards/Folder";
 import './UserPage.scss'
 import {MdQrCodeScanner} from 'react-icons/md';
 import QRCode from 'react-qr-code';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 const UserPage = ({ contract, fetched, folders,account }) => {
   const [folderclosed, setfolderclosed] = useState(true);
   const [docs, setdocs] = useState(null);
@@ -26,7 +28,26 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   }
   return (
     <div>
-      <div className="qr">
+      {
+        folderclosed && <div className="qr">
+          <button onClick={generateQR}>
+            <MdQrCodeScanner 
+              style={{
+                display: 'inline', 
+                transform: 'scale(1.6) translateY(-1px)', 
+                marginRight: '10px'
+              }}/>
+            Generate QR
+          </button>
+        </div>
+      }
+      {qrMade && 
+      <Popup 
+      position="top center"
+      
+        modal
+        nested
+        trigger={folderclosed && <div className="qr">
         <button onClick={generateQR}>
           <MdQrCodeScanner 
             style={{
@@ -36,13 +57,15 @@ const UserPage = ({ contract, fetched, folders,account }) => {
             }}/>
           Generate QR
         </button>
-      </div>
-      {qrMade && 
-        <div className="qrcode" style={{}}>
-          <QRCode 
+        </div>}
+      >
+        <div className="qrcode">
+          <QRCode
             value={account}
           />
+          <p style={{color: 'black'}}>{account}</p>
         </div>
+      </Popup>
       }
       {folderclosed ? (
         <div>

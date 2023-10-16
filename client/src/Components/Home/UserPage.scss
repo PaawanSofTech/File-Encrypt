@@ -11,12 +11,43 @@
     text-align: center;
     margin: 2rem auto;
     z-index: 10000;
+    transition: all .2s;
     & button{
         border-radius: 100px;
         padding: 10px 16px;
         background-color: rgb(27, 104, 159);
     }
     &code{
+        // width: 100px;
+        // height: 100%;
+    }
+}
+.popup-content{
+    // width: auto;
+    padding: 20px;
+    transform: scale(1.2);
+    border-radius: 20px;
+    // transition: all 1s;
+    animation: popup .2s ease-out;
+    animation-fill-mode: backwards;
+}
+
+@keyframes popup {
+    0%{
+        opacity: 0;
+        // width: 0;
+        transform: scale(.7) translateY(-10px);
+    }
+    50%{
+        opacity: 1;
+        // width: 50%;
+        // transform: translateY(-5px);
         
     }
+    100%{
+        opacity: 1;
+        // width: auto;
+        // transform: translateY(0px);
+    }
+    
 }
