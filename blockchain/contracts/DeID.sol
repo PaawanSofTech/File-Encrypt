@@ -48,6 +48,10 @@ contract DeID{
         bool[] Folders;
     }
 
+    struct DataAccessed{
+        address Member;
+        uint Time;
+    }
     // -- User --
 
     // mapping( address => address[]) private Nominee;
@@ -72,6 +76,9 @@ contract DeID{
 
     mapping( address => mapping(address => bool)) private companyAccess;
 
+    mapping ( address => DataAccessed[]) private AccessHistory;
+
+    mapping( address => Request[]) private PreviousCompanies;
     //add documents for company also!
 
     function createUser(string calldata DOB,uint64 Phone,string calldata Name,string calldata Image) public{
@@ -96,6 +103,7 @@ contract DeID{
     }
 
     function addDocs(uint _id ,string calldata _hash) public{
+        //check folder length
         require(userRegistered[msg.sender] || companyRegistered[msg.sender],"Not Registered");
         Documents memory document = Documents(_hash,block.timestamp);
         userDocs[keccak256(abi.encodePacked(msg.sender))][_id].push(document);
@@ -184,6 +192,7 @@ contract DeID{
     function returnUserDocs(address Address) public view returns(Documents[] memory){
         require(companyRegistered[msg.sender],"Not a Registered Company");
         require(companyAccess[msg.sender][Address],"You Don't Have Access to User");
+        // AccessHistory[msg.sender].push(DataAccessed(msg.sender,block.timestamp));
         return companyDocs[keccak256(abi.encodePacked(msg.sender))][Address];
     }
 
@@ -202,12 +211,20 @@ contract DeID{
         companyAccess[Address][msg.sender] = false;
         for(uint i =0; i< activeCompanies[msg.sender].length -1 ;i++){
             if(activeCompanies[msg.sender][i].Address == Address){
+                PreviousCompanies[msg.sender].push(activeCompanies[msg.sender][i]);
                 activeCompanies[msg.sender][i] = activeCompanies[msg.sender][activeCompanies[msg.sender].length -1];
                 activeCompanies[msg.sender].pop();
             }
         }
+        for( uint i =0; i< companyData[keccak256(abi.encodePacked(Address))].length ;i++){
+            if(companyData[keccak256(abi.encodePacked(Address))][i].Address == msg.sender){
+                companyData[keccak256(abi.encodePacked(Address))][i] = companyData[keccak256(abi.encodePacked(Address))][companyData[keccak256(abi.encodePacked(Address))].length - 1];
+                companyData[keccak256(abi.encodePacked(Address))].pop();
+            }
+        }
     }
 
+    //return active companies
     //add events
 
     //add employees
