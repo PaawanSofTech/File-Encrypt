@@ -33,7 +33,7 @@ features2 = features2.flatten()
 cosine_similarity = 1 - distance.cosine(features1, features2)
 
 # Set a similarity threshold
-threshold = 0.85  # Adjust this threshold as needed
+threshold = 0.90  # Adjust this threshold as needed
 
 # Compare the similarity to the threshold
 if cosine_similarity > threshold:
