@@ -5,6 +5,7 @@ import {LuScanLine} from 'react-icons/lu';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import './CompanyPage.scss'
+import CompanyCard from "../Cards/CompanyCard"
 import QrReader from 'react-qr-scanner';
 const delay = 100;
 const CompanyPage = ({ contract, fetched, folders }) => {
@@ -40,6 +41,7 @@ const CompanyPage = ({ contract, fetched, folders }) => {
   const handleError = (err) => {console.log(err)}
   return (
     <div>
+      <CompanyCard/>
       {folderclosed && <div className="qr">
           <button 
           onClick={openScanner}
