@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
-import {LuScanLine} from 'react-icons/lu';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-import './CompanyPage.scss'
-import QrReader from 'react-qr-scanner';
+import { LuScanLine } from "react-icons/lu";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+import "./CompanyPage.scss";
+import CompanyCard from "../Cards/CompanyCard";
+import QrReader from "react-qr-scanner";
 const delay = 100;
-const CompanyPage = ({ contract, fetched, folders }) => {
+const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [folderclosed, setfolderclosed] = useState(true);
   const [docs, setdocs] = useState(null);
   const [val, setval] = useState(0);
   const [scan, setScan] = useState(false);
-  
-  const [inputAddress, setInputAddress] = useState('');
+
+  const [inputAddress, setInputAddress] = useState("");
   // const [result, setResult] = useState('');
 
   const openFolder = async (i) => {
@@ -27,77 +28,92 @@ const CompanyPage = ({ contract, fetched, folders }) => {
       console.log("Error");
     }
   };
-  const openScanner = () =>{
+  const openScanner = () => {
     setScan(true);
-  }
+  };
   const handleScan = (data) => {
-    if(data !==null){
+    if (data !== null) {
       setInputAddress(data.text);
-      console.log("Data",data.text);
+      console.log("Data", data.text);
       // setScan(false);
     }
-  }
-  const handleError = (err) => {console.log(err)}
+  };
+  const handleError = (err) => {
+    console.log(err);
+  };
   return (
     <div>
-      {folderclosed && <div className="qr">
-          <button 
-          onClick={openScanner}
-          >
+      <CompanyCard />
+      {folderclosed && (
+        <div className="qr">
+          <button onClick={openScanner}>
             Scan QR
-            <LuScanLine 
+            <LuScanLine
               style={{
-                display: 'inline', 
-                transform: 'scale(1.6) translateY(-1px)', 
-                marginLeft: '15px'
-              }}/>
+                display: "inline",
+                transform: "scale(1.6) translateY(-1px)",
+                marginLeft: "15px",
+              }}
+            />
           </button>
         </div>
-        }
-        {scan && <Popup 
-        position="top center"
-        modal
-        trigger={folderclosed && <div className="qr">
-        <button onClick={openScanner}>
-          Scan QR
-          <LuScanLine 
-            style={{
-              display: 'inline', 
-              transform: 'scale(1.6) translateY(-1px)', 
-              marginLeft: '15px'
-          }}/>
-        </button>
-      </div>}
-      >
-        <div className="qr__code">
-        <QrReader
-          style={{
-            height: 300
-          }}
-          delay={delay}
-          // style={previewStyle}
-          onError={handleError}
-          onScan={handleScan}
-          facingMode='rear'
-          />
-          {/* <QRCode
+      )}
+      {scan && (
+        <Popup
+          position="top center"
+          modal
+          trigger={
+            folderclosed && (
+              <div className="qr">
+                <button onClick={openScanner}>
+                  Scan QR
+                  <LuScanLine
+                    style={{
+                      display: "inline",
+                      transform: "scale(1.6) translateY(-1px)",
+                      marginLeft: "15px",
+                    }}
+                  />
+                </button>
+              </div>
+            )
+          }
+        >
+          <div className="qr__code">
+            <QrReader
+              style={{
+                height: 300,
+              }}
+              delay={delay}
+              // style={previewStyle}
+              onError={handleError}
+              onScan={handleScan}
+              facingMode="rear"
+            />
+            {/* <QRCode
             value={account}
             size={280}
           /> */}
-          <input 
-            type="text" 
-            placeholder="Or enter wallet address" 
-            onChange={(e)=>setInputAddress(e.target.value)} 
-            value={inputAddress}
-            style={{
-              marginTop: '2.5rem',
-              borderRadius: '100px'
-            }}
-          />
-          <button onSubmit={()=>{console.log("Address",inputAddress)}}>Submit</button>
-          <p className="qr__code__address" >
-            {/* {result && <>{result}</>} */}
-            {/* <CopyToClipboard 
+            <input
+              type="text"
+              placeholder="Or enter wallet address"
+              onChange={(e) => setInputAddress(e.target.value)}
+              value={inputAddress}
+              style={{
+                marginTop: "2.5rem",
+                borderRadius: "100px",
+              }}
+            />
+            <button
+              onSubmit={() => {
+                console.log("Address", inputAddress);
+              }}
+            >
+              Submit
+            </button>
+            <p className="qr__code__address">
+              {/* {result && <>{result}</>} */}
+              {/* <CopyToClipboard 
               text = {account} 
               onCopy={()=>setCopied(true)}
             >
@@ -106,9 +122,10 @@ const CompanyPage = ({ contract, fetched, folders }) => {
               // <img src={require('../../animation_lnu1fmgr_small.gif')}/>
               :<LuCopy style={{cursor: 'pointer', transform: 'scale(1.2) translateY(2px)'}}/>}
             </CopyToClipboard> */}
-          </p>
-        </div>
-      </Popup>}
+            </p>
+          </div>
+        </Popup>
+      )}
       {folderclosed ? (
         <div>
           {fetched && (
@@ -116,9 +133,6 @@ const CompanyPage = ({ contract, fetched, folders }) => {
               <div className="row__1">
                 <div className="row__header">
                   <div className="row__title"></div>
-                  <button className="row__btn">
-                    View all <span>&rarr;</span>
-                  </button>
                 </div>
                 <div className="row__sections">
                   {/* {folders.map((folder, i) => {
@@ -137,6 +151,9 @@ const CompanyPage = ({ contract, fetched, folders }) => {
               <div className="row__2">
                 <div className="row__header">
                   <div className="row__title">Requests</div>
+                  <button className="row__btn">
+                    View all <span>&rarr;</span>
+                  </button>
                 </div>
                 <div className="row__sections">
                   <div className="column"></div>
