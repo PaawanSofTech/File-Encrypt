@@ -14,7 +14,7 @@ const CompanyPage = ({ contract, fetched, folders }) => {
   const [scan, setScan] = useState(false);
   
   const [inputAddress, setInputAddress] = useState('');
-  const [result, setResult] = useState('');
+  // const [result, setResult] = useState('');
 
   const openFolder = async (i) => {
     try {
@@ -30,7 +30,13 @@ const CompanyPage = ({ contract, fetched, folders }) => {
   const openScanner = () =>{
     setScan(true);
   }
-  const handleScan = (data) => {setResult(data)}
+  const handleScan = (data) => {
+    if(data !==null){
+      setInputAddress(data.text);
+      console.log("Data",data.text);
+      // setScan(false);
+    }
+  }
   const handleError = (err) => {console.log(err)}
   return (
     <div>
@@ -88,9 +94,9 @@ const CompanyPage = ({ contract, fetched, folders }) => {
               borderRadius: '100px'
             }}
           />
-          <button onSubmit={()=>setResult(inputAddress)}>Submit</button>
+          <button onSubmit={()=>{console.log("Address",inputAddress)}}>Submit</button>
           <p className="qr__code__address" >
-            {result && <>{result}</>}
+            {/* {result && <>{result}</>} */}
             {/* <CopyToClipboard 
               text = {account} 
               onCopy={()=>setCopied(true)}
