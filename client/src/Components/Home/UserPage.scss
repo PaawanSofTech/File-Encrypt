@@ -17,17 +17,28 @@
         padding: 10px 16px;
         background-color: rgb(27, 104, 159);
     }
-    &code{
-        // width: 100px;
-        // height: 100%;
+    &__code{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        &__address{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: 400;
+            font-size: 1.05rem;
+            color: red;
+        }
     }
 }
 .popup-content{
-    // width: auto;
-    padding: 20px;
-    transform: scale(1.2);
-    border-radius: 20px;
-    // transition: all 1s;
+    width: auto!important;
+    padding: 20px 20px 10px 20px!important;
+    transform: scale(1.5);
+    // text-align: center!important;
+    border-radius: 20px!important;
+    // transition: all 1s!important;
     animation: popup .2s ease-out;
     animation-fill-mode: backwards;
 }
@@ -35,19 +46,14 @@
 @keyframes popup {
     0%{
         opacity: 0;
-        // width: 0;
         transform: scale(.7) translateY(-10px);
     }
     50%{
         opacity: 1;
-        // width: 50%;
-        // transform: translateY(-5px);
         
     }
     100%{
         opacity: 1;
-        // width: auto;
-        // transform: translateY(0px);
     }
     
 }
