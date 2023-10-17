@@ -34,7 +34,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   return (
     <div>
       {
-        folderclosed && <div className="qr">
+        folderclosed && fetched && <div className="qr">
           <button onClick={generateQR}>
             <MdQrCodeScanner 
               style={{

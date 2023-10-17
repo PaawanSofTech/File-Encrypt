@@ -159,11 +159,18 @@ const Homepage = ({ setconnected }) => {
           </div>
 
           {isuser ? (
-            <UserPage fetched={fetched} contract={contract} folders={folders} account = {accounts}/>
+            <UserPage 
+              fetched={fetched} 
+              contract={contract} 
+              folders={folders} 
+              account = {accounts}
+              connect = {connect}
+            />
           ) : (
             <CompanyPage
               fetched={fetched}
               contract={contract}
+              connect={connect}
               // folders={folders}
             />
           )}
