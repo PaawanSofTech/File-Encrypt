@@ -116,9 +116,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
               <div className="row__1">
                 <div className="row__header">
                   <div className="row__title"></div>
-                  <button className="row__btn">
-                    View all <span>&rarr;</span>
-                  </button>
+                  
                 </div>
                 <div className="row__sections">
                   {/* {folders.map((folder, i) => {
@@ -137,6 +135,9 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
               <div className="row__2">
                 <div className="row__header">
                   <div className="row__title">Requests</div>
+                  <button className="row__btn">
+                    View all <span>&rarr;</span>
+                  </button>
                 </div>
                 <div className="row__sections">
                   <div className="column"></div>
