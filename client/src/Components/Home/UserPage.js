@@ -3,14 +3,19 @@ import Documents from "./Documents";
 import Folder from "../Cards/Folder";
 import './UserPage.scss'
 import {MdQrCodeScanner} from 'react-icons/md';
+import {LuCopy} from 'react-icons/lu';
+import {LuCopyCheck} from 'react-icons/lu';
+
 import QRCode from 'react-qr-code';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 const UserPage = ({ contract, fetched, folders,account }) => {
   const [folderclosed, setfolderclosed] = useState(true);
   const [docs, setdocs] = useState(null);
   const [val, setval] = useState(0);
   const [qrMade, setQrMade] = useState(false);
+  const [copied, setCopied] = useState(false);
   console.log(account);
   const openFolder = async (i) => {
     try {
@@ -59,11 +64,23 @@ const UserPage = ({ contract, fetched, folders,account }) => {
         </button>
         </div>}
       >
-        <div className="qrcode">
+        <div className="qr__code">
           <QRCode
             value={account}
+            size={280}
           />
-          <p style={{color: 'black'}}>{account}</p>
+          <p className="qr__code__address" >
+            <p>{account}</p>
+            <CopyToClipboard 
+              text = {account} 
+              onCopy={()=>setCopied(true)}
+            >
+              {copied ? 
+              <LuCopyCheck style={{transform: 'scale(1.2) translateY(2px)'}}/>
+              // <img src={require('../../animation_lnu1fmgr_small.gif')}/>
+              :<LuCopy style={{cursor: 'pointer', transform: 'scale(1.2) translateY(2px)'}}/>}
+            </CopyToClipboard>
+          </p>
         </div>
       </Popup>
       }
