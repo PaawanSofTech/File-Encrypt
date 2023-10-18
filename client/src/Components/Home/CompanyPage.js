@@ -88,7 +88,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
               // style={previewStyle}
               onError={handleError}
               onScan={handleScan}
-              facingMode="rear"
+              facingMode='rear'
             />
             {/* <QRCode
             value={account}
