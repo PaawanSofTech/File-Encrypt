@@ -16,6 +16,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const [val, setval] = useState(0);
   const [qrMade, setQrMade] = useState(false);
   const [copied, setCopied] = useState(false);
+  const reqs = [1,2,3];
   console.log(account);
   const openFolder = async (i) => {
     try {
@@ -50,9 +51,9 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       <Popup 
       position="top center"
       
-        modal
-        nested
-        trigger={folderclosed && <div className="qr">
+      modal
+      nested
+      trigger={folderclosed && <div className="qr">
         <button onClick={generateQR}>
           <MdQrCodeScanner 
             style={{
@@ -99,9 +100,9 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                   {folders.map((folder, i) => {
                     return (
                       <div
-                        onClick={() => {
-                          openFolder(i);
-                        }}
+                      onClick={() => {
+                        openFolder(i);
+                      }}
                       >
                         <Folder contract={contract} folder={folder} />
                       </div>
@@ -112,11 +113,37 @@ const UserPage = ({ contract, fetched, folders,account }) => {
               <div className="row__2">
                 <div className="row__header">
                   <div className="row__title">Requests</div>
+                  <button className="row__btn">
+                    View all <span>&rarr;</span>
+                  </button>
                 </div>
                 <div className="row__sections">
-                  <div className="column"></div>
-                  <div className="column"></div>
-                  <div className="column"></div>
+                    {reqs.map((req)=>{ return(
+                      <div key = {req} className="column">
+                        <div className="column__header">
+                          <div className="column__title">Company {req}</div>
+                        </div>
+                        <div className="column__fields">
+                          <ul>
+                            <li>Name</li>
+                            <li>Address</li>
+                            <li>DOB</li>
+                            <li>Phone</li>
+                            <li>Image</li>
+                            <span>Folders:</span>
+                            <ul>
+                              <li>Medical</li>
+                              <li>Bank</li>
+                              <li>Academics</li>
+                            </ul>
+                          </ul>
+                        </div>
+                        <div className="column__footer">
+                          <button id="accept">Accept</button>
+                          <button id="decline" onClick={()=>{reqs.splice(req,1)}}>Decline</button>
+                        </div>
+                      </div>
+                    )})}
                 </div>
               </div>
               <div className="row__3">
