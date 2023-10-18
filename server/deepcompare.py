@@ -10,8 +10,8 @@ base_model = VGG16(weights='imagenet')
 model = Model(inputs=base_model.input, outputs=base_model.get_layer('fc2').output)
 
 # Load and preprocess your images
-image_path1 = 'image9.jpg'
-image_path2 = 'image8.jpg'
+image_path1 = 'image1.png'
+image_path2 = 'image2.jpg'
 
 img1 = image.load_img(image_path1, target_size=(224, 224))
 img1 = image.img_to_array(img1)

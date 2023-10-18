@@ -7,7 +7,7 @@ import 'reactjs-popup/dist/index.css';
 import './CompanyPage.scss'
 import QrReader from 'react-qr-scanner';
 const delay = 100;
-const CompanyPage = ({ contract, fetched, folders }) => {
+const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [folderclosed, setfolderclosed] = useState(true);
   const [docs, setdocs] = useState(null);
   const [val, setval] = useState(0);
@@ -40,7 +40,7 @@ const CompanyPage = ({ contract, fetched, folders }) => {
   const handleError = (err) => {console.log(err)}
   return (
     <div>
-      {folderclosed && <div className="qr">
+      {fetched && <div className="qr">
           <button 
           onClick={openScanner}
           >
