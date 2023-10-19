@@ -17,7 +17,28 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const [qrMade, setQrMade] = useState(false);
   const [copied, setCopied] = useState(false);
   const reqs = [1,2,3];
-  console.log(account);
+  const companies = [
+    {
+      name: 'Company 1',
+      address: '0x000000000000000000000000000000000000000000',
+      firstAccess: '22/06/2021, 12:23',
+    },
+    {
+      name: 'Company 2',
+      address: '0x111111111111111111111111111111111111111111',
+      firstAccess: '02/10/2020, 13:20',
+    },
+    {
+      name: 'Company 3',
+      address: '0x222222222222222222222222222222222222222222',
+      firstAccess: '13/01/2017, 16:29',
+    },
+  ]
+  const truncateAddress = (walletAddress) =>{
+    let string = walletAddress.substring(0,4) + '...' + walletAddress.substring(38,42);
+    console.log(string)
+    return string;
+  }
   const openFolder = async (i) => {
     try {
       const res = await contract.returnDocs(i);
@@ -35,7 +56,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   return (
     <div>
       {
-        folderclosed && fetched && <div className="qr">
+        folderclosed && fetched && !qrMade && <div className="qr">
           <button onClick={generateQR}>
             <MdQrCodeScanner 
               style={{
@@ -140,7 +161,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                         </div>
                         <div className="column__footer">
                           <button id="accept">Accept</button>
-                          <button id="decline" onClick={()=>{reqs.splice(req,1)}}>Decline</button>
+                          <button id="decline">Decline</button>
                         </div>
                       </div>
                     )})}
@@ -148,15 +169,57 @@ const UserPage = ({ contract, fetched, folders,account }) => {
               </div>
               <div className="row__3">
                 <div className="row__header">
-                  <div className="row__title">History</div>
+                  <div className="row__title">Active companies</div>
                   <button className="row__btn">
                     View all <span>&rarr;</span>
                   </button>
                 </div>
                 <div className="row__sections">
-                  <div className="column"></div>
-                  <div className="column"></div>
-                  <div className="column"></div>
+                    {reqs.map((req)=>{ return(
+                      <div key = {req} className="column">
+                        <div className="column__header">
+                          <div className="column__title">Company {req}</div>
+                        </div>
+                        <div className="column__fields">
+                          <ul>
+                            <li>Name</li>
+                            <li>Address</li>
+                            <li>DOB</li>
+                            <li>Phone</li>
+                            <li>Image</li>
+                            <span>Folders:</span>
+                            <ul>
+                              <li>Medical</li>
+                              <li>Bank</li>
+                              <li>Academics</li>
+                            </ul>
+                          </ul>
+                        </div>
+                        <div className="column__footer">
+                          <button id="revoke">Revoke access</button>
+                        </div>
+                      </div>
+                    )})}
+                </div>
+              </div>
+              <div className="row__4">
+                <div className="row__header">
+                  <div className="row__title">History</div>
+                  <button className="row__btn">
+                    View all <span>&rarr;</span>
+                  </button>
+                </div>
+                <div className="row__sections-h">
+                  {companies.map((company)=>{return (
+
+                    <div  className="row-h">
+                      <div>{company.name}</div>
+                      <div>{truncateAddress(company.address)}</div>
+                      <div>{company.firstAccess}</div>
+                    </div>
+                  )
+                  })}
+                  <div></div>
                 </div>
               </div>
             </div>
