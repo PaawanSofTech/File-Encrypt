@@ -188,18 +188,3 @@
     animation: popup .2s ease-out;
     animation-fill-mode: backwards;
 }
-
-@keyframes popup {
-    0%{
-        opacity: 0;
-        transform: scale(.7) translateY(-10px);
-    }
-    50%{
-        opacity: 1;
-        
-    }
-    100%{
-        opacity: 1;
-    }
-    
-}
