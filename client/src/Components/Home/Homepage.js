@@ -4,8 +4,7 @@ import { ethers } from "ethers";
 import SignUp from "../Auth/SignUp";
 import { PiUserCircle } from "react-icons/pi";
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json";
-import Documents from "./Documents";
-import Folder from "../Cards/Folder";
+import Navbar from "../Helpers/Navbar";
 import UserPage from "./UserPage";
 import CompanyPage from "./CompanyPage";
 import { truncateAddressNavbar } from "../Helpers/truncateAddress";
@@ -123,6 +122,7 @@ const Homepage = ({ setconnected }) => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
+      <Navbar setconnected = {setconnected}/>
       {registered ? (
         <>
           <div className="flex navbar">
@@ -177,7 +177,6 @@ const Homepage = ({ setconnected }) => {
               fetched={fetched}
               contract={contract}
               connect={connect}
-              // folders={folders}
             />
           )}
         </>

@@ -63,9 +63,8 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   };
   return (
     <div>
-      {!isModalOpen && 
+      {!isModalOpen && connect &&
       <div className="qr">
-
       <button onClick={openModal}>
          <p>Scan QR
           <LuScanLine
