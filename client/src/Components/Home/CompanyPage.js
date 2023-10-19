@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
 import { LuScanLine } from "react-icons/lu";
+import { AiOutlineUser } from 'react-icons/ai';
 import { AiOutlineUser } from 'react-icons/ai';
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
@@ -15,6 +17,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [docs, setdocs] = useState(null);
   const [val, setval] = useState(0);
   const [scan, setScan] = useState(false);
+  const [requested, setrequested] = useState( false)
   const [requested, setrequested] = useState( false)
   const [inputAddress, setInputAddress] = useState("");
   const [result, setResult] = useState('');
@@ -54,6 +57,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
     if (data !== null) {
       setInputAddress(data.text);
       setrequested(true);
+      // setScanButtonText(false);
       // setScanButtonText(false);
       console.log("Data", data.text);
     }
@@ -121,15 +125,27 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                   <div className="row__title"></div>
                 </div>
                 <div className="row__sections"></div>
+                <div className="row__sections"></div>
               </div>
               <div className="row__2">
                 <div className="row__header">
+                  <div className="row__title">Active Users</div>
                   <div className="row__title">Active Users</div>
                   <button className="row__btn">
                     View all <span>&rarr;</span>
                   </button>
                 </div>
                 <div className="row__sections">
+                  {users.map(user => {return(
+                    <div className="column">
+                      <h1 style={{textAlign: 'center'}}>{user.name}</h1>
+                      <div style={{
+                        textAlign: 'center',
+                        display: 'flex',
+                        justifyContent: 'center'
+                      }}><AiOutlineUser size={200}/></div>
+                    </div>
+                  )})}
                   {users.map(user => {return(
                     <div className="column">
                       <h1 style={{textAlign: 'center'}}>{user.name}</h1>
