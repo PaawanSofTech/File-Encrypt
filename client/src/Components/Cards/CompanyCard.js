@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import "./CompanyCard.css";
+import "./CompanyCard.scss";
 import Button from "@mui/material/Button";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import SendIcon from "@mui/icons-material/Send";
 
 const Card = () => {
-  const [dobVerified, setDOBVerified] = useState(false);
-  const [addressVerified, setAddressVerified] = useState(false);
-  const [imageVerified, setImageVerified] = useState(false);
-  const [filesVerified, setFilesVerified] = useState(false);
+  const [name, setName] = useState(false);
+  const [phone, setPhone] = useState(false);
+  const [dob, setDOB] = useState(false);
+  const [address, setAddress] = useState(false);
+  const [image, setImage] = useState(false);
+
+  const [medical, setMedical] = useState(false);
+  const [academics, setAcademics] = useState(false);
+  const [bank, setBank] = useState(false);
 
   return (
     <div className="company-card">
@@ -17,7 +21,6 @@ const Card = () => {
           style={{
             display: "flex",
             width: "100%",
-            fontSize: "16px",
             fontWeight: "bold",
             justifyContent: "center",
           }}
@@ -26,85 +29,152 @@ const Card = () => {
         </h1>
       </div>
       <div className="wrapper">
-        <div>Date of birth</div>
-        {!dobVerified ? (
+        <div>Name</div>
+        {!name ? (
           <Button
             variant="outlined"
             size="small"
             onClick={() => {
-              setDOBVerified(true);
+              setName(true);
             }}
           >
-            Verify
+            Select
           </Button>
         ) : (
-          <CheckCircleIcon color="success" fontSize="small" />
+          <CheckCircleIcon color="success" />
         )}
       </div>
 
+      <div className="wrapper">
+        <div>Date of birth</div>
+        {!dob ? (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              setDOB(true);
+            }}
+          >
+            Select
+          </Button>
+        ) : (
+          <CheckCircleIcon color="success" />
+        )}
+      </div>
+      
       <div className="wrapper">
         <div>Address</div>
-        {!addressVerified ? (
+        {!address ? (
           <Button
             variant="outlined"
             size="small"
             onClick={() => {
-              setAddressVerified(true);
+              setAddress(true);
             }}
           >
-            Verify
+            Select
+          </Button>
+        ) : (
+          <CheckCircleIcon color="success" fontSize="small" />
+        )}
+      </div>
+      
+      <div className="wrapper">
+        <div>Contact number</div>
+        {!phone ? (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              setPhone(true);
+            }}
+          >
+            Select
+          </Button>
+        ) : (
+          <CheckCircleIcon color="success" />
+        )}
+      </div>
+      
+
+      <div className="wrapper">
+        <div>Profile image</div>
+        {!image ? (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              setImage(true);
+            }}
+          >
+            Select
           </Button>
         ) : (
           <CheckCircleIcon color="success" fontSize="small" />
         )}
       </div>
 
+      <div style={{
+        marginTop:'15px',
+        fontSize: '20px'
+      }}>Folders</div>
+
       <div className="wrapper">
-        <div>Image</div>
-        {!imageVerified ? (
+        <div>Medical</div>
+        {!medical ? (
           <Button
             variant="outlined"
             size="small"
             onClick={() => {
-              setImageVerified(true);
+              setMedical(true);
             }}
           >
-            Verify
+            Select
           </Button>
         ) : (
           <CheckCircleIcon color="success" fontSize="small" />
         )}
       </div>
-
       <div className="wrapper">
-        <div style={{ fontWeight: "900", color: "cyan", fontSize: "16px" }}>
-          {" "}
-          Files
+        <div>Academics</div>
+        {!academics ? (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              setAcademics(true);
+            }}
+          >
+            Select
+          </Button>
+        ) : (
+          <CheckCircleIcon color="success" fontSize="small" />
+        )}
+      </div>
+      <div className="wrapper">
+        <div>Bank</div>
+        {!bank ? (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              setBank(true);
+            }}
+          >
+            Select
+          </Button>
+        ) : (
+          <CheckCircleIcon color="success" fontSize="small" />
+        )}
+      </div>
+      <div className="submit">
+        <Button
+          variant="contained"
+          size="medium"
+          >
+          Send Request
+        </Button>
         </div>
-        {!filesVerified ? (
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => {
-              setFilesVerified(true);
-            }}
-          >
-            Verify
-          </Button>
-        ) : (
-          <CheckCircleIcon color="success" fontSize="small" />
-        )}
-      </div>
-      <Button
-        variant="contained"
-        fullWidth
-        size="medium"
-        onClick={() => {}}
-        style={{ marginTop: "4px" }}
-        endIcon={<SendIcon />}
-      >
-        Send Request
-      </Button>
     </div>
   );
 };
