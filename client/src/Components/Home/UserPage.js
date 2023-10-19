@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
+import {truncateAddressHistory} from '../Helpers/truncateAddress';
 import './UserPage.scss'
 import {MdQrCodeScanner} from 'react-icons/md';
 import {LuCopy} from 'react-icons/lu';
 import {LuCopyCheck} from 'react-icons/lu';
-
+import Modal from "../Helpers/Modal";
 import QRCode from 'react-qr-code';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -16,6 +17,16 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const [val, setval] = useState(0);
   const [qrMade, setQrMade] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => {
+    setIsModalOpen(true);
+    setQrMade(true)
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const reqs = [1,2,3];
   const companies = [
     {
@@ -34,11 +45,11 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       firstAccess: '13/01/2017, 16:29',
     },
   ]
-  const truncateAddress = (walletAddress) =>{
-    let string = walletAddress.substring(0,4) + '...' + walletAddress.substring(38,42);
-    console.log(string)
-    return string;
-  }
+  // const truncateAddress = (walletAddress) =>{
+  //   let string = walletAddress.substring(0,4) + '...' + walletAddress.substring(38,42);
+  //   console.log(string)
+  //   return string;
+  // }
   const openFolder = async (i) => {
     try {
       const res = await contract.returnDocs(i);
@@ -50,12 +61,46 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       console.log("Error");
     }
   };
-  const generateQR = () =>{
-    setQrMade(true)
-  }
   return (
     <div>
       {
+        !isModalOpen ? 
+        <div className="qr">
+        <button onClick={openModal}>
+          <MdQrCodeScanner 
+            style={{
+              display: 'inline', 
+              transform: 'scale(1.6) translateY(-1px)', 
+              marginRight: '10px'
+            }}/>
+          Generate QR
+        </button>
+      </div>
+       : <></>
+      }
+      <Modal isOpen={isModalOpen} closeModal={closeModal}>
+        <div>
+          <div className="qr__code">
+            <QRCode
+              value={account}
+              size={280}
+            />
+            <p className="qr__code__address" >
+              <p>{account}</p>
+              <CopyToClipboard 
+                text = {account} 
+                onCopy={()=>setCopied(true)}
+              >
+                {copied ? 
+                <LuCopyCheck style={{transform: 'scale(1.2) translateY(2px)'}}/>
+                // <img src={require('../../animation_lnu1fmgr_small.gif')}/>
+                :<LuCopy style={{cursor: 'pointer', transform: 'scale(1.2) translateY(2px)'}}/>}
+              </CopyToClipboard>
+            </p>
+          </div>
+        </div>
+      </Modal>
+      {/* {
         folderclosed && fetched && !qrMade && <div className="qr">
           <button onClick={generateQR}>
             <MdQrCodeScanner 
@@ -67,8 +112,8 @@ const UserPage = ({ contract, fetched, folders,account }) => {
             Generate QR
           </button>
         </div>
-      }
-      {qrMade && 
+      } */}
+      {/* {qrMade && 
       <Popup 
       position="top center"
       
@@ -105,7 +150,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
           </p>
         </div>
       </Popup>
-      }
+      } */}
       {folderclosed ? (
         <div>
           {fetched && (
@@ -214,7 +259,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
 
                     <div  className="row-h">
                       <div>{company.name}</div>
-                      <div>{truncateAddress(company.address)}</div>
+                      <div>{truncateAddressHistory(company.address)}</div>
                       <div>{company.firstAccess}</div>
                     </div>
                   )
