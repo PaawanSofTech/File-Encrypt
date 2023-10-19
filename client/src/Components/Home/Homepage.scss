@@ -14,10 +14,15 @@
     &__right{
         right: 2rem;
         position: absolute;
-        & button{
+        display: flex;
+        align-items: center;
+        & > *{
+            // width: 100%;
             font-size: 1.4rem;
+            display: flex;
+            align-items: center;
             background-image: linear-gradient(to right bottom, #0e3851, #114867);
-            padding: .5rem 1.5rem;
+            padding: .5rem 1rem .5rem 1rem;
             border-radius: 4rem;
             &:not(:last-child){
                 margin-right: 1rem;

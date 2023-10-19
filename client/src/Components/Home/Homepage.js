@@ -9,6 +9,8 @@ import Folder from "../Cards/Folder";
 import UserPage from "./UserPage";
 // import { PushAPI } from '@pushprotocol/restapi';
 import CompanyPage from "./CompanyPage";
+import { truncateAddressNavbar } from "../Helpers/truncateAddress";
+import Notifications from '../Cards/Notifications'
 import Push from "../Cards/Push";
 const Homepage = ({ setconnected }) => {
   const [signers, setsigners] = useState(null);
@@ -147,11 +149,13 @@ const Homepage = ({ setconnected }) => {
             </div>
             <div className="navbar__right">
               {connect && (
-                <button className="navbar__right--edit">Edit Profile</button>
+                <button className="navbar__right--notify">
+                <Notifications/>
+                </button>
               )}
               {connect ? (
-                <button className="truncate max-w-[230px] navbar__right--connect">
-                  accounts : {accounts}
+                <button className="truncate max-w-[250px] flex navbar__right--connect">
+                  accounts : {truncateAddressNavbar(accounts)}
                 </button>
               ) : (
                 <button
