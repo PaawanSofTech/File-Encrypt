@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import React, { useEffect, useState } from "react";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
 import { LuScanLine } from "react-icons/lu";
-import { AiOutlineUser } from 'react-icons/ai';
 import { AiOutlineUser } from 'react-icons/ai';
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
@@ -17,7 +15,6 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [docs, setdocs] = useState(null);
   const [val, setval] = useState(0);
   const [scan, setScan] = useState(false);
-  const [requested, setrequested] = useState( false)
   const [requested, setrequested] = useState( false)
   const [inputAddress, setInputAddress] = useState("");
   const [result, setResult] = useState('');

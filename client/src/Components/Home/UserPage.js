@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
 import {truncateAddressHistory} from '../Helpers/truncateAddress';
-import {truncateAddressHistory} from '../Helpers/truncateAddress';
 import './UserPage.scss'
 import {MdQrCodeScanner} from 'react-icons/md';
 import {LuCopy} from 'react-icons/lu';
 import {LuCopyCheck} from 'react-icons/lu';
-import Modal from "../Helpers/Modal";
 import Modal from "../Helpers/Modal";
 import QRCode from 'react-qr-code';
 import 'reactjs-popup/dist/index.css';
@@ -19,17 +17,6 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const [qrMade, setQrMade] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  const openModal = () => {
-    setIsModalOpen(true);
-    setQrMade(true)
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  
   const openModal = () => {
     setIsModalOpen(true);
     setQrMade(true)
@@ -105,21 +92,6 @@ const UserPage = ({ contract, fetched, folders,account }) => {
           </div>
         </div>
       </Modal>
-      {/* {
-        folderclosed && fetched && !qrMade && <div className="qr">
-          <button onClick={generateQR}>
-            <MdQrCodeScanner 
-              style={{
-                display: 'inline', 
-                transform: 'scale(1.6) translateY(-1px)', 
-                marginRight: '10px'
-              }}/>
-            Generate QR
-          </button>
-        </div>
-      } */}
-      {/* {qrMade && 
-      } */}
       {/* {qrMade && 
       <Popup 
       position="top center"
@@ -158,10 +130,9 @@ const UserPage = ({ contract, fetched, folders,account }) => {
         </div>
       </Popup>
       } */}
-      } */}
-      {folderclosed ? (
+      {folderclosed ? 
         <div>
-          {fetched && (
+          {fetched && 
             <div className="row">
               <div className="row__1">
                 <div className="row__header">
@@ -323,9 +294,11 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                 </div>
               </div>
             </div>
-          )}
-        </div>
-      ) : (
+          }
+          </div>
+          }
+        </div>  
+        :
         <Documents
           val={val}
           setfolderclosed={setfolderclosed}
@@ -333,9 +306,9 @@ const UserPage = ({ contract, fetched, folders,account }) => {
           contract={contract}
           docs={docs}
         />
-      )}
+      }
     </div>
-  );
-};
+  )
+}
 
 export default UserPage;
