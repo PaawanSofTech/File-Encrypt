@@ -13,9 +13,9 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [docs, setdocs] = useState(null);
   const [val, setval] = useState(0);
   const [scan, setScan] = useState(false);
-
+const [requested, setrequested] = useState(false)
   const [inputAddress, setInputAddress] = useState("");
-  // const [result, setResult] = useState('');
+  const [result, setResult] = useState('');
 
   const openFolder = async (i) => {
     try {
@@ -34,28 +34,33 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const handleScan = (data) => {
     if (data !== null) {
       setInputAddress(data.text);
+      setrequested(true);
       console.log("Data", data.text);
-      // setScan(false);
     }
   };
   const handleError = (err) => {
     console.log(err);
   };
+  const scanQrButton = () => {
+    return(
+      <button onClick={openScanner}>
+        Scan QR
+        <LuScanLine
+          style={{
+            display: "inline",
+            transform: "scale(1.6) translateY(-1px)",
+            marginLeft: "15px",
+          }}
+          />
+      </button>
+    )
+  }
   return (
     <div>
-      <CompanyCard />
+      {/* <CompanyCard /> */}
       {folderclosed && (
         <div className="qr">
-          <button onClick={openScanner}>
-            Scan QR
-            <LuScanLine
-              style={{
-                display: "inline",
-                transform: "scale(1.6) translateY(-1px)",
-                marginLeft: "15px",
-              }}
-            />
-          </button>
+          {scanQrButton()}
         </div>
       )}
       {scan && (
@@ -63,23 +68,13 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
           position="top center"
           modal
           trigger={
-            folderclosed && (
-              <div className="qr">
-                <button onClick={openScanner}>
-                  Scan QR
-                  <LuScanLine
-                    style={{
-                      display: "inline",
-                      transform: "scale(1.6) translateY(-1px)",
-                      marginLeft: "15px",
-                    }}
-                  />
-                </button>
-              </div>
-            )
+            folderclosed && (<div className="qr">{scanQrButton()}</div>)
           }
         >
-          <div className="qr__code">
+          {scan ? 
+            <div className="qr__code">
+              {!requested ?
+               <div>
             <QrReader
               style={{
                 height: 300,
@@ -89,7 +84,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
               onError={handleError}
               onScan={handleScan}
               facingMode='rear'
-            />
+              />
             {/* <QRCode
             value={account}
             size={280}
@@ -103,29 +98,27 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                 marginTop: "2.5rem",
                 borderRadius: "100px",
               }}
-            />
+              />
             <button
               onSubmit={() => {
+                setResult(inputAddress)
                 console.log("Address", inputAddress);
               }}
-            >
+              >
               Submit
             </button>
-            <p className="qr__code__address">
-              {/* {result && <>{result}</>} */}
-              {/* <CopyToClipboard 
-              text = {account} 
-              onCopy={()=>setCopied(true)}
-            >
-              {copied ? 
-              <LuCopyCheck style={{transform: 'scale(1.2) translateY(2px)'}}/>
-              // <img src={require('../../animation_lnu1fmgr_small.gif')}/>
-              :<LuCopy style={{cursor: 'pointer', transform: 'scale(1.2) translateY(2px)'}}/>}
-            </CopyToClipboard> */}
-            </p>
-          </div>
-        </Popup>
+               </div>
+               :
+               <p>Request Options</p>
+
+               }
+          </div> 
+          : <>
+          <CompanyCard/>
+          </>}
+          </Popup>
       )}
+      {/* {result && ()} */}
       {folderclosed ? (
         <div>
           {fetched && (
