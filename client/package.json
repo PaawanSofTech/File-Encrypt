@@ -7,13 +7,17 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.14",
     "@mui/material": "^5.14.14",
+    "@pushprotocol/restapi": "^1.4.28",
     "@tailwindcss/forms": "^0.5.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "assert": "^2.1.0",
     "axios": "^1.5.0",
+    "browserify-zlib": "^0.2.0",
     "dart-sass": "^1.25.0",
     "ethers": "^5.7.2",
+    "https-browserify": "^1.0.0",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
@@ -26,6 +30,10 @@
     "react-scripts": "^5.0.1",
     "reactjs-popup": "^2.0.6",
     "sass": "^1.69.4",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.3",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -55,5 +63,10 @@
   "devDependencies": {
     "resolve-url-loader": "^5.0.0",
     "tailwindcss": "^3.3.3"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "tailwind.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

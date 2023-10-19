@@ -7,8 +7,11 @@ import DeID from "../../artifacts/contracts/DeID.sol/DeID.json";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
 import UserPage from "./UserPage";
+// import { PushAPI } from '@pushprotocol/restapi';
 import CompanyPage from "./CompanyPage";
+import Push from "../Cards/Push";
 const Homepage = ({ setconnected }) => {
+  const [signers, setsigners] = useState(null);
   const [connect, setconnect] = useState(false);
   const [provider, setprovider] = useState(null);
   const [accounts, setaccounts] = useState(null);
@@ -58,7 +61,9 @@ const Homepage = ({ setconnected }) => {
           }
         }
         await provider.send("eth_requestAccounts", []);
+        console.log("Provider",provider);
         const signer = provider.getSigner();
+        setsigners(signer);
         const address = await signer.getAddress();
         setaccounts(address);
         let contractAddress = "0xc182C4Ee6D85E0E99DB147908ac3F59cff02973b"; //mumbai
@@ -114,7 +119,6 @@ const Homepage = ({ setconnected }) => {
       setregistered(false);
     }
   };
-
   useEffect(() => {
     connect && checkRegistered();
   }, [contract]);
@@ -180,6 +184,7 @@ const Homepage = ({ setconnected }) => {
       ) : (
         <SignUp contract={contract} />
       )}
+      <Push provider={provider} signers={signers}/>
     </div>
   );
 };
