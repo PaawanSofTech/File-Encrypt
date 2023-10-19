@@ -8,7 +8,7 @@ const Push = ({signers,provider}) => {
         console.log("Signers",signers);
         // const signer = ethers.Wallet.createRandom()
         userAlice = await PushAPI.initialize(signers, { env: 'staging' });
-        console.log("Gotcha",userAlice);
+        console.log("Gotcha : ",userAlice);
       } catch (error) {
         console.log("Error",error);
       }
