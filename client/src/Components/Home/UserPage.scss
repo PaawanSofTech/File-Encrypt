@@ -185,6 +185,7 @@
     margin: 2rem auto;
     // z-index: 10000;
     transition: all .2s;
+
     & button{
         border-radius: 100px;
         padding: 10px 16px;
@@ -214,19 +215,4 @@
     // transition: all 1s!important;
     animation: popup .2s ease-out;
     animation-fill-mode: backwards;
-}
-
-@keyframes popup {
-    0%{
-        opacity: 0;
-        transform: scale(.7) translateY(-10px);
-    }
-    50%{
-        opacity: 1;
-        
-    }
-    100%{
-        opacity: 1;
-    }
-    
 }

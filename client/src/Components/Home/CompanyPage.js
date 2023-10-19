@@ -8,6 +8,7 @@ import "reactjs-popup/dist/index.css";
 import "./CompanyPage.scss";
 import CompanyCard from "../Cards/CompanyCard";
 import QrReader from "react-qr-scanner";
+import Modal from "../Helpers/Modal";
 const delay = 100;
 const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [folderclosed, setfolderclosed] = useState(true);
@@ -17,6 +18,18 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [requested, setrequested] = useState( false)
   const [inputAddress, setInputAddress] = useState("");
   const [result, setResult] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setInputAddress('')
+    setrequested(false)
+  };
+
   const users = [
     {name: 'Username 1'},
     {name: 'Username 2'},
@@ -48,51 +61,13 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const handleError = (err) => {
     console.log(err);
   };
-  const Scannerco = () => {
-    useEffect(()=>{
-      console.log("Loaded")
-      setScan(true);
-    },[])
-    return(
-      <div>
-      <QrReader
-        style={{
-          height: 300,
-        }}
-        delay={delay}
-        // style={previewStyle}
-        onError={handleError}
-        onScan={handleScan}
-        facingMode='rear'
-        />
-      <input
-        type="text"
-        placeholder="Or enter wallet address"
-        onChange={(e) => setInputAddress(e.target.value)}
-        value={inputAddress}
-        style={{
-          marginTop: "2.5rem",
-          borderRadius: "100px",
-        }}
-        />
-      <button
-        onSubmit={() => {
-          setResult(inputAddress)
-          console.log("Address", inputAddress);
-        }}
-      >
-        Submit
-      </button>
-      </div>
-    )
+  return (
+    <div>
+      {!isModalOpen && 
+      <div className="qr">
 
-  }
-  const scanQrButton = () => {
-    // if(scanButtonText === 'Scanner'){
-
-      return(
-        <button onClick={openScanner}>
-          Scan QR
+      <button onClick={openModal}>
+         <p>Scan QR
           <LuScanLine
             style={{
               display: "inline",
@@ -100,40 +75,43 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
               marginLeft: "15px",
             }}
             />
-        </button>
-      )
-    // }
-    // return <></>
-  }
-  return (
-    <div>
-      {/* <CompanyCard /> */}
-      {folderclosed && (
-        <div className="qr">
-          {!requested && scanQrButton()}
-        </div>
-      )}
-      
-      {scan && (
-        <Popup
-        
-          position="top center"
-          modal
-          trigger={
-            folderclosed && (<div className="qr">{!requested && scanQrButton()}</div>)
-          }
-        >
-          {scan &&
-            <div className="qr__code">
-              {!requested ?
-               <Scannerco />
-               : <>
-          <CompanyCard/>
-          </>}
-          </div> 
-          }
-          </Popup>
-      )}
+          </p>
+      </button>
+      </div>
+      }
+      <Modal isOpen={isModalOpen} closeModal={closeModal}>
+        {!requested ? <div>
+          <QrReader
+            style={{
+              height: 300,
+            }}
+            delay={delay}
+            // style={previewStyle}
+            onError={handleError}
+            onScan={handleScan}
+            facingMode='rear'
+          />
+          <input
+            type="text"
+            placeholder="Or enter wallet address"
+            onChange={(e) => setInputAddress(e.target.value)}
+            value={inputAddress}
+            style={{
+              marginTop: "2.5rem",
+              borderRadius: "100px",
+              width: '100%'
+            }}
+            />
+          <button
+            onSubmit={() => {
+              setResult(inputAddress)
+              console.log("Address", inputAddress);
+            }}
+          >
+            Submit
+          </button>
+        </div> : <><CompanyCard /></>}
+      </Modal>
       {folderclosed ? (
         <div>
           {fetched && (

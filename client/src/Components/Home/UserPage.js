@@ -8,7 +8,6 @@ import {LuCopy} from 'react-icons/lu';
 import {LuCopyCheck} from 'react-icons/lu';
 import Modal from "../Helpers/Modal";
 import QRCode from 'react-qr-code';
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 const UserPage = ({ contract, fetched, folders,account }) => {
@@ -45,11 +44,6 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       firstAccess: '13/01/2017, 16:29',
     },
   ]
-  // const truncateAddress = (walletAddress) =>{
-  //   let string = walletAddress.substring(0,4) + '...' + walletAddress.substring(38,42);
-  //   console.log(string)
-  //   return string;
-  // }
   const openFolder = async (i) => {
     try {
       const res = await contract.returnDocs(i);
@@ -64,19 +58,18 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   return (
     <div>
       {
-        !isModalOpen ? 
+        !isModalOpen && 
         <div className="qr">
         <button onClick={openModal}>
+          Generate QR
           <MdQrCodeScanner 
             style={{
               display: 'inline', 
               transform: 'scale(1.6) translateY(-1px)', 
-              marginRight: '10px'
+              marginLeft: '10px'
             }}/>
-          Generate QR
         </button>
       </div>
-       : <></>
       }
       <Modal isOpen={isModalOpen} closeModal={closeModal}>
         <div>

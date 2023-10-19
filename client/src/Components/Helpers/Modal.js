@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {RxCross1} from 'react-icons/rx';
+import {RxCross2} from 'react-icons/rx';
 import './Modal.scss'; // Import your CSS for styling
 
 const Modal = ({ isOpen, closeModal, children }) => {
@@ -9,7 +9,7 @@ const Modal = ({ isOpen, closeModal, children }) => {
     <div className="modal-overlay">
       <div className="modal">
         <button className="close-button" onClick={closeModal}>
-          <RxCross1/>
+          <RxCross2/>
         </button>
         {children}
       </div>
