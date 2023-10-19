@@ -71,7 +71,7 @@ const [requested, setrequested] = useState(false)
             folderclosed && (<div className="qr">{scanQrButton()}</div>)
           }
         >
-          {scan ? 
+          {scan &&
             <div className="qr__code">
               {!requested ?
                <div>
@@ -108,14 +108,13 @@ const [requested, setrequested] = useState(false)
               Submit
             </button>
                </div>
-               :
-               <p>Request Options</p>
+               : <>
+               <CompanyCard/>
+               </>
 
                }
           </div> 
-          : <>
-          <CompanyCard/>
-          </>}
+          }
           </Popup>
       )}
       {/* {result && ()} */}
