@@ -200,7 +200,6 @@ const Homepage = ({ setconnected }) => {
       ) : (
         <SignUp contract={contract} />
       )}
-      <Push signers={signers} provider={provider}/>
     </div>
   );
 };
