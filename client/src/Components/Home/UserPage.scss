@@ -194,7 +194,8 @@
     & button{
         border-radius: 100px;
         padding: 10px 16px;
-        background-color: rgb(27, 104, 159);
+        background-image: linear-gradient(to top,#213DD9 ,#87DDFD);
+        // background-color: rgb(27, 104, 159);
         z-index: 10;
     }
     &__code{

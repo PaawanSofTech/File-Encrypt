@@ -137,7 +137,6 @@ const Homepage = ({ setconnected }) => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
-      
       {registered ? (
         <>
           <div className="navbar">
@@ -160,7 +159,7 @@ const Homepage = ({ setconnected }) => {
                   {connect && fetched ? (
                     <>
                       <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
-                        backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
+                        backgroundImage: 'linear-gradient(to top,#213DD9 ,#87DDFD)'
                       }}>
                         accounts : {truncateAddressNavbar(accounts)}
                       </button>
@@ -182,7 +181,7 @@ const Homepage = ({ setconnected }) => {
                     onClick={connectFetch}
                     className="navbar__right--connect"
                     style={{
-                      backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
+                      backgroundImage: 'linear-gradient(to top,#213DD9 ,#87DDFD)'
                     }}
                     >
                       Connect
@@ -213,9 +212,9 @@ const Homepage = ({ setconnected }) => {
           </> : < div style={{transform: 'translateY(10rem)'}}><Loader/></div>
         }
         </>
-      ) : (
-        <SignUp contract={contract} />
-      )}
+      ) 
+      : (<SignUp contract={contract} />)
+      }
     </div>
   );
 };
