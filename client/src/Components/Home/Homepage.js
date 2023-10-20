@@ -141,39 +141,54 @@ const Homepage = ({ setconnected }) => {
         <>
           <div className="navbar">
             <div className="navbar__center">
-              {fetched && (
-              <div className="navbar__left">
-                {userDetails?.Image.length === 0 ? (
-                  <PiUserCircle size={30}/>
+              <div style={{
+                fontSize: '16px',
+                display: 'flex',
+                gap: '3rem'
+              }}>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>My folders</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button>
+              </div>
+                <div className="navbar__right">
+                  {connect && (
+                    <button className="navbar__right--notify">
+                      <Notifications userAlice={userAlice}/>
+                    </button>
+                  )}
+                  {connect && fetched ? (
+                    <>
+                      <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
+                        backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
+                      }}>
+                        accounts : {truncateAddressNavbar(accounts)}
+                      </button>
+                      <div className="navbar__left">
+                        {userDetails?.Image.length === 0 ? (
+                          <PiUserCircle size={30}/>
+                          ) : (
+                            <img
+                            src={userDetails?.Image}
+                            alt="Profile"
+                            className="max-h-[30px]"
+                            />
+                            )
+                          }
+                      </div>
+                    </>
                   ) : (
-                    <img
-                    src={userDetails?.Image}
-                    alt="Profile"
-                    className="max-h-[30px]"
-                  />
-                )}
-                  <p className="ml-4">{userDetails?.Name}</p>
-              </div>)}
-              <h1 className="navbar__center--brand">Group Project</h1>
-            </div>
-            <div className="navbar__right">
-              {connect && (
-                <button className="navbar__right--notify">
-                <Notifications userAlice={userAlice}/>
-                </button>
-              )}
-              {connect ? (
-                <button className="truncate max-w-[250px] flex navbar__right--connect">
-                  accounts : {truncateAddressNavbar(accounts)}
-                </button>
-              ) : (
-                <button
-                  onClick={connectFetch}
-                  className="navbar__right--connect"
-                >
-                  Connect
-                </button>
-              )}
+                    <button
+                    onClick={connectFetch}
+                    className="navbar__right--connect"
+                    style={{
+                      backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
+                    }}
+                    >
+                      Connect
+                    </button>
+                  )}
+                </div>
+
             </div>
           </div>
           {
@@ -194,7 +209,7 @@ const Homepage = ({ setconnected }) => {
                   connect={connect}
                   />
               )}
-          </> : <><Loader/></>
+          </> : < div style={{transform: 'translateY(10rem)'}}><Loader/></div>
         }
         </>
       ) : (

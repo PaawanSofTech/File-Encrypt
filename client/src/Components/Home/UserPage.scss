@@ -171,7 +171,8 @@
     }
     &:hover{
         transform: translateY(-5px);
-        background-color: #a3dcd4;
+        background-color: #a3dcd4ff;
+        // background-image: radial-gradient(ellipse at center top, #075014, #346f3f, #b3b5b3);
         color: black
     }
 }
@@ -187,13 +188,14 @@
     font-weight: 500;
     text-align: center;
     margin: 2rem auto;
-    // z-index: 10000;
+    z-index: 10000;
     transition: all .2s;
 
     & button{
         border-radius: 100px;
         padding: 10px 16px;
         background-color: rgb(27, 104, 159);
+        z-index: 10;
     }
     &__code{
         display: flex;

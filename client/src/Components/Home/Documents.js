@@ -57,7 +57,7 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
     return time;
   }
   return (
-    <div className='flex-col flex items-center'>
+    <div className='flex-col flex items-center' style={{transform: 'translateY(10rem)'}}>
       <button onClick={()=>{setfolderclosed(true)}} className=' absolute left-28' style={{marginTop: '4rem'}}>
         <IoIosArrowBack size={37} />
       </button>

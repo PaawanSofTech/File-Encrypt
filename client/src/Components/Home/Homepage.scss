@@ -10,14 +10,15 @@
     // padding: 2rem 2rem;
     display: flex;
     margin-top: 1rem;
-    justify-content: center;
+    // justify-content: center;
     width: 100%;
     // align-items: center;
     height: 50px;
     box-sizing: border-box;
     // background-color: transparent;
     position: fixed;
-    z-index: 10000;
+    top: 2rem;
+    z-index: 10;
     &__left{
         display: flex;
         & > *{
@@ -42,12 +43,12 @@
     &__right{
         display: flex;
         align-items: center;
+        justify-content: center;
         & > *{
             // width: 100%;
             font-size: 1.4rem;
             display: flex;
             align-items: center;
-            background-image: linear-gradient(to right bottom, #c9c9c9, #b8b8b8);
             color: black;
             padding: .5rem 1rem .5rem 1rem;
             border-radius: 4rem;

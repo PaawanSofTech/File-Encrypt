@@ -3,7 +3,9 @@ import {ImSpinner2} from 'react-icons/im';
 import './Loader.scss'
 const Loader = () => {
   return (
-    <div className='loader'>
+    <div className='loader' style={{
+      // marginTop: '4rem'
+    }}>
         <div className='loader__text'>
         Loading 
         </div>

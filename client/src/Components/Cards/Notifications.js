@@ -33,7 +33,7 @@ const Notifications = ({userAlice}) => {
       <Menu as="div" className="relative inline-block text-left">
     <div>
         <Menu.Button className="flex mx-5 relative p-3 items-center justify-center">
-        <GoBellFill size={27} />
+        <GoBellFill size={27} style={{color: 'white'}}/>
         { notifications !== 0 && 
         <p className='absolute top-0.5 bg-[#b80605] rounded-2xl py-[3px] px-[7px] right-0.5 text-xs'>{notifications.length}</p>
         }

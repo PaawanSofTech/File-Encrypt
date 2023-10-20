@@ -55,13 +55,12 @@ const UserPage = ({ contract, fetched, folders,account }) => {
     },
   ]
   const setBgColor = (index) => {
-    if(index%3 == 0){
+    if(index%3 === 0){
       return 'red'
     }
-    else if(index%3 == 1){
+    else if(index%3 === 1){
       return 'blue'
     }else{
-      
       return 'green'
     }
   }
@@ -78,31 +77,6 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       console.log("Error");
     }
   };
-  const returnReqModal = () =>{
-    return (
-      <Modal isOpen={isReqModalOpen} closeModal={closeReqModal}>
-        <div className="column__fields">
-          <ul>
-            <li>Name</li>
-            <li>Address</li>
-            <li>DOB</li>
-            <li>Phone</li>
-            <li>Image</li>
-            <span>Folders:</span>
-            <ul>
-              <li>Medical</li>
-              <li>Bank</li>
-              <li>Academics</li>
-            </ul>
-          </ul>
-        </div>
-        <div className="column__footer">
-          <button id="accept">Accept</button>
-          <button id="decline">Decline</button>
-        </div>
-      </Modal>
-    )
-  }
   return (
     <>
   {!loader ? <div>
@@ -142,8 +116,11 @@ const UserPage = ({ contract, fetched, folders,account }) => {
             </div>
           </div>
         </Modal>
+        <Modal isOpen={isReqModalOpen} closeModal={closeReqModal}>
+          {reqContent}
+        </Modal>
         {folderclosed ? (
-          <div>
+          <div style={{transform: 'translateY(4rem)'}}>
             {fetched && (
               <div className="row">
                 <div className="row__1">
@@ -238,9 +215,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                           </div>
                         </div>
                       )})}
-                      <Modal isOpen={isReqModalOpen} closeModal={closeReqModal}>
-                        {reqContent}
-                      </Modal>
+                      
                   </div>
                 </div>
                 <div className="row__3">
@@ -308,10 +283,11 @@ const UserPage = ({ contract, fetched, folders,account }) => {
           name={folders[val]}
           contract={contract}
           docs={docs}
+          style={{transform: 'translateY(10rem)'}}
           />
           )}
       </div>
-      : <><Loader/></>
+      : < div style={{transform: 'translateY(10rem)'}}><Loader/></div>
       
     }
     </>
