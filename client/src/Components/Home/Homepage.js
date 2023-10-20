@@ -152,6 +152,7 @@ const Homepage = ({ setconnected }) => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
+      
       {registered ? (
         <>
           <div className="navbar ">

@@ -6,7 +6,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { BsArrowRight} from 'react-icons/bs';
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-// import "./CompanyPage.scss";
+import "./CompanyPage.scss";
 import CompanyCard from "../Cards/CompanyCard";
 import QrReader from "react-qr-scanner";
 import Modal from "../Helpers/Modal";
@@ -20,6 +20,16 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [inputAddress, setInputAddress] = useState("");
   const [result, setResult] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReqModalOpen, setisReqModalOpen] = useState(false);
+  const [userContent, setuserContent] = useState('');
+  const [bg, setbg] = useState('');
+
+  const openReqModal = () => {
+    setisReqModalOpen(true);
+  };
+  const closeReqModal = () => {
+    setisReqModalOpen(false);
+  };
   
   const openModal = () => {
     setIsModalOpen(true);
@@ -50,19 +60,28 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   };
   const openScanner = () => {
     setScan(true);
+    setBgColor('white');
   };
   const handleScan = (data) => {
     if (data !== null) {
       setInputAddress(data.text);
       setrequested(true);
-      // setScanButtonText(false);
-      // setScanButtonText(false);
       console.log("Data", data.text);
     }
   };
   const handleError = (err) => {
     console.log(err);
   };
+  const setBgColor = (index) => {
+    if(index%3 === 0){
+      return 'linear-gradient(to bottom, #fa9f88, #fa4582ff)'
+    }
+    else if(index%3 === 1){
+      return 'linear-gradient(to bottom, #f4c402, #f56701)'
+    }else{
+      return 'linear-gradient(to bottom, #87efa2, #0bb79a)'
+    }
+  }
   return (
     <div>
       {!isModalOpen && connect &&
@@ -80,7 +99,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
       </button>
       </div>
       }
-      <Modal isOpen={isModalOpen} closeModal={closeModal}>
+      <Modal isOpen={isModalOpen} closeModal={closeModal} bg={'linear-gradient(to bottom, rgb(234, 234, 234), rgb(179, 179, 179))'}>
         {!requested ? <div>
           <QrReader
             style={{
@@ -125,28 +144,55 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
           }
         </div> : <><CompanyCard closeModal={closeModal} contract={contract} inputAddress={inputAddress} /></>}
       </Modal>
+      <Modal isOpen={isReqModalOpen} closeModal={closeReqModal} bg={bg}>
+          {userContent}
+      </Modal>
       {folderclosed ? (
         <div>
         {fetched && (
-            <div className="row">
-              <div className="row__1">
-                <div className="row__header">
-                  <div className="row__title"></div>
+            <div className="company_row">
+              <div className="company_row__1">
+                <div className="company_row__header">
+                  <div className="company_row__title"></div>
                 </div>
-                <div className="row__sections"></div>
+                <div className="company_row__sections"></div>
                 {/* <div className="row__sections"></div> */}
               </div>
-              <div className="row__2">
-                <div className="row__header">
-                  <div className="row__title">Active Users</div>
+              <div className="company_row__2">
+                <div className="company_row__header">
+                  <div className="company_row__title">Active Users</div>
                   {/* <div className="row__title">Active Users</div> */}
-                  <button className="row__btn">
+                  <button className="company_row__btn">
                     View all <span>&rarr;</span>
                   </button>
                 </div>
-                <div className="row__sections">
-                  {users.map(user => {return(
-                    <div className="column">
+                <div className="company_row__sections">
+                  {users.map((user,index) => {return(
+                    <div className="company_column" style={{backgroundImage: `${setBgColor(index)}`, cursor: 'pointer'}}
+                      onClick = {()=>{
+                        openReqModal()
+                        setbg(setBgColor(index))
+                        setuserContent(<div className="column__fields" style={{border: 'none', color:'black'}}>
+                          <div className="popup">
+                            <div className="popup__up">
+                              {/* <img src='' alt=".image" className="image" style={{borderRadius: '4rem'}}/> */}
+                              <div className="image"><AiOutlineUser size={105}/></div>
+                              <div style={{display: 'flex'}} className="details">
+                                <div>Name</div>
+                                <div>Address</div>
+                                <div>DOB</div>
+                                <div>Phone</div>
+                              </div>
+                            </div>
+                            <div className="popup__down ">
+                              <div>Medical</div>
+                              <div>Academics</div>
+                              <div>Bank</div>
+                            </div>
+                          </div>
+                      </div>)
+                      }}
+                    >
                       <h1 style={{textAlign: 'center'}}>{user.name}</h1>
                       <div style={{
                         textAlign: 'center',
@@ -157,14 +203,14 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                   )})}
                 </div>
               </div>
-              <div className="row__3">
-                <div className="row__header">
-                  <div className="row__title">History</div>
-                  <button className="row__btn">
+              <div className="company_row__3">
+                <div className="company_row__header">
+                  <div className="company_row__title">History</div>
+                  <button className="company_row__btn">
                     View all <span>&rarr;</span>
                   </button>
                 </div>
-                <div className="row__sections">
+                <div className="company_row__sections">
                   <div className="column"></div>
                   <div className="column"></div>
                   <div className="column"></div>
