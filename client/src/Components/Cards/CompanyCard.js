@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./CompanyCard.scss";
 import Button from "@mui/material/Button";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-const Card = () => {
+const Card = ({contract,inputAddress,closeModal}) => {
   var [name, setName] = useState(false);
   var [phone, setPhone] = useState(false);
   var [dob, setDOB] = useState(false);
@@ -15,8 +15,16 @@ const Card = () => {
   var [bank, setBank] = useState(false);
 
   // On submit request
-  const onSubmit = (e) =>{
+  const onSubmit = async(e) =>{
     e.preventDefault()
+    try {
+      const res = await contract.requestDetails(inputAddress,dob,phone,name,image,[medical,academics,bank]);
+      console.log("res",res);
+      closeModal();
+
+    } catch (error) {
+      console.log("error",error);
+    }
     console.log('send')
   }
   return (

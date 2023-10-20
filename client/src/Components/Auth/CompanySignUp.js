@@ -1,9 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import { PushAPI } from '@pushprotocol/restapi'
+import { ethers } from 'ethers'
 import './CompanySignUp.scss'
 import {convToBase64} from '../Helpers/convToBase64.js'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-const CompanySignUp = ({contract}) => {
+const CompanySignUp = ({contract,accounts,provider}) => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [regId, setRegId] = useState('');
@@ -26,6 +28,14 @@ const CompanySignUp = ({contract}) => {
       console.log("Vals",contactNum,regId, name, image);
       const res = await contract.createCompany(contactNum,regId, name, image);
       console.log(res);
+      const _signer = new ethers.Wallet('4db9c06dab911fec3585fa2b0e519931a96a16e377a750c63fd6aa31d2cc3e61', provider);
+      console.log("CHanged",_signer);
+      const _userAlice = await PushAPI.initialize(_signer, { env: 'staging' });
+      console.log("Gotcha",_userAlice);
+      const addedDelegate = await _userAlice.channel.delegate.add(
+        `eip155:5:${accounts}`
+      )
+      console.log("added Delegate",addedDelegate);
     } catch (error) {
       console.log("Error",error);
     }

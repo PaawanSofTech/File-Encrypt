@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
 import {truncateAddressHistory} from '../Helpers/truncateAddress';
@@ -11,7 +11,7 @@ import QRCode from 'react-qr-code';
 import 'reactjs-popup/dist/index.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Loader from "../Helpers/Loader";
-const UserPage = ({ contract, fetched, folders,account }) => {
+const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
   const [folderclosed, setfolderclosed] = useState(true);
   const [docs, setdocs] = useState(null);
   const [val, setval] = useState(0);
@@ -21,7 +21,9 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const [isReqModalOpen, setisReqModalOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [reqContent, setReqContent] = useState('');
-
+  const [activecompanyDetails, setactivecompanyDetails] = useState([]);
+  const [companyDetails, setcompanyDetails] = useState([]);
+  const [activeCompData, setactiveCompData] = useState([]);
   const openQrModal = () => {
     setisQrModalOpen(true);
     setQrMade(true)
@@ -36,7 +38,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const closeReqModal = () => {
     setisReqModalOpen(false);
   };
-  const reqs = [1,2,3];
+  const [reqs, setreqs] = useState(['1','2','3']);
   const companies = [
     {
       name: 'Company 1',
@@ -77,6 +79,70 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       console.log("Error");
     }
   };
+  const callrequests=async()=>{
+    try {
+      const res = await contract.returnUserRequests();
+      console.log("REquests",res);
+      var companyDetails = [];
+      for( var i =0;i<res.length;i++){
+        const company = await contract.companyDetails(res[i].Address);
+        companyDetails.push(company);
+      }
+      setcompanyDetails(companyDetails);
+      console.log("Company",companyDetails);
+      setreqs(res);
+    } catch (error) {
+      console.log("Error",error);
+    }
+  }
+  const acceptRequest=async(id)=>{
+    try {
+      const res = await contract.acceptDetails(id);
+      console.log("res");
+      await userAlice.notification.subscribe(
+        `eip155:5:0xaF7f488eDf63410AF7B82998A6a96a14dcB8e89d` // channel address in CAIP format
+      )
+    } catch (error) {
+      console.log("error",error);
+    }
+    closeReqModal();
+  }
+  const rejectRequest=async(id)=>{
+    try {
+      const res = await contract.rejectDetails(id);
+      console.log("res");
+    } catch (error) {
+      console.log("err",error);
+    }
+    closeReqModal();
+  }
+  const activeCompanies=async()=>{
+    try {
+      const res = await contract.accessedCompanies();
+      console.log("res",res);
+      var activecompanyDetails = [];
+      for( var i =0;i<res.length;i++){
+        const company = await contract.companyDetails(res[i].Address);
+        activecompanyDetails.push(company);
+      }
+      setactivecompanyDetails(activecompanyDetails);
+      activeCompData(res);
+    } catch (error) {
+      console.log("Error");
+    }
+  }
+  const revokeAccess=async(address)=>{
+    try {
+      const res = await contract.revokeAccess(address);
+      console.log("res",res);
+    } catch (error) {
+      console.log("error");
+    }
+  }
+  useEffect(()=>{
+    callrequests();
+    // activeCompanies();
+  },[account])
   return (
     <>
   {!loader ? <div>
@@ -152,7 +218,8 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                     </button>
                   </div>
                   <div className="row__sections">
-                      {reqs.map((req, index)=>{ return(
+                      {reqs.map((req, index)=>{ 
+                        return(
                         <div key = {index} className="column" style={{backgroundColor: `${index }`}}>
                           <div className="column__header">
                             <div className="image">
@@ -161,12 +228,12 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                                 borderRadius: '30px'
                               }}/>
                             </div>
-                            <div className="column__title"><p style={{fontSize:'25px', fontWeight: '500'}}>Company {req}</p></div>
+                            <div className="column__title"><p style={{fontSize:'25px', fontWeight: '500'}}>{companyDetails.length === 0 ? <p>Company</p> : <p>{companyDetails[index].Name}</p>}</p></div>
                           </div>
                           <div className="column__content" style={{
                             padding: '3rem',
                             height: '70%'
-                          }}>This company has requested your Adhaar, ...</div>
+                          }}>This company has requested your Details</div>
                           <div className="column__footer" 
                             style={{
                               marginTop: '1rem',
@@ -191,27 +258,28 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                                       fontSize:'25px', 
                                       fontWeight: '500',
                                     }}
-                                    >Company {req}
+                                    >{companyDetails.length === 0 ? <p>Company</p> : <p>{companyDetails[index].Name}</p>}
                                     </p>
                                   </div>
                                 <ul>
-                                  <li>Name</li>
-                                  <li>Address</li>
-                                  <li>DOB</li>
-                                  <li>Phone</li>
-                                  <li>Image</li>
+                                  {req.Name && <li>Name</li>}
+                                  {req.Image&& <li>Image</li>}
+                                  {req.DOB && <li>DOB</li>}
+                                  {req.Phone && <li>Phone</li>}
                                   <span>Folders:</span>
-                                  <ul>
-                                    <li>Medical</li>
-                                    <li>Bank</li>
-                                    <li>Academics</li>
-                                  </ul>
+                                    <ul>
+                                      {req.Folders[0] && <li>Medical</li>}
+                                      {req.Folders[1] && <li>Bank</li>}
+                                      {req.Folders[2] && <li>Academics</li>}
+                                    </ul>
                                 </ul>
+                                <button onClick={()=>{acceptRequest(index)}}>Accept</button>
+                                <button onClick={()=>{rejectRequest(index)}}>Decline</button>
                               </div>)
                                 console.log(reqContent)
                               }}
                             >
-                              View details</p>
+                              View Request</p>
                           </div>
                         </div>
                       )})}
@@ -226,28 +294,27 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                     </button>
                   </div>
                   <div className="row__sections">
-                      {reqs.map((req)=>{ return(
-                        <div key = {req} className="column">
+                      {activeCompData.map((active,key)=>{ return(
+                        <div key = {key} className="column">
                           <div className="column__header">
-                            <div className="column__title">Company {req}</div>
+                            <div className="column__title">{activecompanyDetails.length === 0 ? <p>Company</p> : <p>{activecompanyDetails[key].Name}</p>} </div>
                           </div>
                           <div className="column__fields">
-                            <ul>
-                              <li>Name</li>
-                              <li>Address</li>
-                              <li>DOB</li>
-                              <li>Phone</li>
-                              <li>Image</li>
-                              <span>Folders:</span>
-                              <ul>
-                                <li>Medical</li>
-                                <li>Bank</li>
-                                <li>Academics</li>
-                              </ul>
-                            </ul>
+                          <ul>
+                                  {active.Name && <li>Name</li>}
+                                  {active.Image&& <li>Image</li>}
+                                  {active.DOB && <li>DOB</li>}
+                                  {active.Phone && <li>Phone</li>}
+                                  <span>Folders:</span>
+                                    <ul>
+                                      {active.Folders[0] && <li>Medical</li>}
+                                      {active.Folders[1] && <li>Bank</li>}
+                                      {active.Folders[2] && <li>Academics</li>}
+                                    </ul>
+                                </ul>
                           </div>
                           <div className="column__footer">
-                            <button id="revoke">Revoke access</button>
+                            <button onClick={()=>{revokeAccess(active.Address)}} id="revoke">Revoke access</button>
                           </div>
                         </div>
                       )})}

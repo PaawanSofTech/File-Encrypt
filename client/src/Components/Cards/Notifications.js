@@ -2,23 +2,35 @@ import { Menu, Transition } from '@headlessui/react'
 import { GoBellFill} from "react-icons/go";
 import {FcSettings} from "react-icons/fc";
 import React,{useState, Fragment, useEffect} from 'react'
-import Slider from '@mui/material/Slider';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Switch from '@mui/material/Switch';
 
 const Notifications = ({userAlice}) => {
-    const [name, setName] = useState(false);
+    const [settings, setsettings] = useState(false);
+    const [basics, setbasics] = useState(false);
+    const [medical, setMedical] = useState(false);
     const [academics, setAcademics] = useState(false);
     const [bank, setBank] = useState(false);
-    const [medical, setMedical] = useState(false);
-    const [settings, setsettings] = useState(false);
 
     const getNotifications=async()=>{
         try {
             const inboxNotifications = await userAlice.notification.list('INBOX');
             console.log("Notifications",inboxNotifications);
             setnotifications(inboxNotifications);
+        } catch (error) {
+            console.log("Error",error);
+        }
+    }
+    const onSubmit=async(e)=>{
+        e.preventDefault();
+        try {
+            const response = await userAlice.notification.subscribe(`eip155:5:0xaF7f488eDf63410AF7B82998A6a96a14dcB8e89d`, {
+                settings: [ // settings are dependent on channel
+                  {enabled: basics}, // setting 1
+                  {enabled: medical}, // setting 2
+                  {enabled: academics}, // setting 3
+                  {enabled: bank}//setting 4
+                ]
+              })
+              console.log("here",response);
         } catch (error) {
             console.log("Error",error);
         }
@@ -71,28 +83,57 @@ const Notifications = ({userAlice}) => {
             <div>
                 <p>Settings</p>
                 <div>
+                <form onSubmit={onSubmit}>
+                    <div className="basic_details">
+                    <div className="basics">
+                        <label for='basics' className="label_basics">Basics</label>
+                        <label class="slider-container">
+                        <input type="checkbox" onChange={()=>{
+                            setbasics(!basics);
+                            console.log(basics);
+                        }}/>
+                        <span class="slider"></span>
+                        </label>          
+                    </div>
+                    </div>
+                    <div className="folder_details">
+                    <div style={{transform: 'translateX(-20px)'}}>Folders</div>
+                    <div>
+                        <label for='med' className="label_image">Medical</label>
+                        <label class="slider-container">
+                        <input type="checkbox" onChange={()=>{
+                            setMedical(!medical);
+                            console.log(medical);
+                        }}/>
+                        <span class="slider"></span>
+                        </label>          
+                    </div>
+                    <div>
+                        <label for='acad' className="label_image">Academics</label>
+                        <label class="slider-container">
+                        <input type="checkbox" onChange={()=>{
+                            setAcademics(!academics);
+                            console.log(academics);
+                        }}/>
+                        <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div>
+                        <label for='bank' className="label_image">Bank</label>
+                        <label class="slider-container">
+                        <input type="checkbox" onChange={()=>{
+                            setBank(!bank);
+                            console.log(bank);
+                        }}/>
+                        <span class="slider"></span>
+                        </label>
+                    </div>
+                    </div>
+                    <div className="submit">
+                    <button>Send</button>
+                    </div>
+                </form>
                 </div>
-
-      <div>
-        <label>
-          Academics:
-          <input type="checkbox" checked={academics} onChange={() => setAcademics(!academics)} />
-        </label>
-      </div>
-
-      <div>
-        <label>
-          Bank:
-          <input type="checkbox" checked={bank} onChange={() => setBank(!bank)} />
-        </label>
-      </div>
-
-      <div>
-        <label>
-          Medical:
-          <input type="checkbox" checked={medical} onChange={() => setMedical(!medical)} />
-        </label>
-      </div>
             </div>
             :
             <div>
