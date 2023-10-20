@@ -20,7 +20,6 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loader, setLoader] = useState(false);
 
-  
   const openModal = () => {
     setIsModalOpen(true);
     setQrMade(true)

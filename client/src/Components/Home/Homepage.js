@@ -5,11 +5,14 @@ import SignUp from "../Auth/SignUp";
 import { PiUserCircle } from "react-icons/pi";
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json";
 import UserPage from "./UserPage";
+// import { PushAPI } from '@pushprotocol/restapi';
 import CompanyPage from "./CompanyPage";
 import { truncateAddressNavbar } from "../Helpers/truncateAddress";
 import Notifications from '../Cards/Notifications'
+import Push from "../Cards/Push";
 import Loader from "../Helpers/Loader";
 const Homepage = ({ setconnected }) => {
+  const [signers, setsigners] = useState(null);
   const [connect, setconnect] = useState(false);
   const [provider, setprovider] = useState(null);
   const [accounts, setaccounts] = useState(null);
@@ -63,7 +66,9 @@ const Homepage = ({ setconnected }) => {
           }
         }
         await provider.send("eth_requestAccounts", []);
+        console.log("Provider",provider);
         const signer = provider.getSigner();
+        setsigners(signer);
         const address = await signer.getAddress();
         setaccounts(address);
         let contractAddress = "0xc182C4Ee6D85E0E99DB147908ac3F59cff02973b"; //mumbai
@@ -120,7 +125,6 @@ const Homepage = ({ setconnected }) => {
       setregistered(false);
     }
   };
-
   useEffect(() => {
     connect && checkRegistered();
   }, [contract]);
@@ -192,6 +196,7 @@ const Homepage = ({ setconnected }) => {
       ) : (
         <SignUp contract={contract} />
       )}
+      <Push provider={provider} signers={signers}/>
     </div>
   );
 };

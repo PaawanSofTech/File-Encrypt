@@ -56,6 +56,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
       setInputAddress(data.text);
       setrequested(true);
       // setScanButtonText(false);
+      // setScanButtonText(false);
       console.log("Data", data.text);
     }
   };
@@ -132,10 +133,12 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                   <div className="row__title"></div>
                 </div>
                 <div className="row__sections"></div>
+                {/* <div className="row__sections"></div> */}
               </div>
               <div className="row__2">
                 <div className="row__header">
                   <div className="row__title">Active Users</div>
+                  {/* <div className="row__title">Active Users</div> */}
                   <button className="row__btn">
                     View all <span>&rarr;</span>
                   </button>
