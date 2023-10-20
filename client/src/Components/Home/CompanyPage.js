@@ -6,7 +6,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { BsArrowRight} from 'react-icons/bs';
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import "./CompanyPage.scss";
+// import "./CompanyPage.scss";
 import CompanyCard from "../Cards/CompanyCard";
 import QrReader from "react-qr-scanner";
 import Modal from "../Helpers/Modal";

@@ -17,16 +17,24 @@ const UserPage = ({ contract, fetched, folders,account }) => {
   const [val, setval] = useState(0);
   const [qrMade, setQrMade] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isQrModalOpen, setisQrModalOpen] = useState(false);
+  const [isReqModalOpen, setisReqModalOpen] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [reqContent, setReqContent] = useState('');
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openQrModal = () => {
+    setisQrModalOpen(true);
     setQrMade(true)
   };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeQrModal = () => {
+    setisQrModalOpen(false);
+  };
+  const openReqModal = () => {
+    setisReqModalOpen(true);
+    setQrMade(true)
+  };
+  const closeReqModal = () => {
+    setisReqModalOpen(false);
   };
   const reqs = [1,2,3];
   const companies = [
@@ -46,6 +54,17 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       firstAccess: '13/01/2017, 16:29',
     },
   ]
+  const setBgColor = (index) => {
+    if(index%3 == 0){
+      return 'red'
+    }
+    else if(index%3 == 1){
+      return 'blue'
+    }else{
+      
+      return 'green'
+    }
+  }
   const openFolder = async (i) => {
     setLoader(true);
     try {
@@ -59,13 +78,38 @@ const UserPage = ({ contract, fetched, folders,account }) => {
       console.log("Error");
     }
   };
+  const returnReqModal = () =>{
+    return (
+      <Modal isOpen={isReqModalOpen} closeModal={closeReqModal}>
+        <div className="column__fields">
+          <ul>
+            <li>Name</li>
+            <li>Address</li>
+            <li>DOB</li>
+            <li>Phone</li>
+            <li>Image</li>
+            <span>Folders:</span>
+            <ul>
+              <li>Medical</li>
+              <li>Bank</li>
+              <li>Academics</li>
+            </ul>
+          </ul>
+        </div>
+        <div className="column__footer">
+          <button id="accept">Accept</button>
+          <button id="decline">Decline</button>
+        </div>
+      </Modal>
+    )
+  }
   return (
     <>
   {!loader ? <div>
         {
-          !isModalOpen && 
+          !isQrModalOpen && 
           <div className="qr">
-          <button onClick={openModal}>
+          <button onClick={openQrModal}>
             Generate QR
             <MdQrCodeScanner 
               style={{
@@ -76,7 +120,7 @@ const UserPage = ({ contract, fetched, folders,account }) => {
           </button>
         </div>
         }
-        <Modal isOpen={isModalOpen} closeModal={closeModal}>
+        <Modal isOpen={isQrModalOpen} closeModal={closeQrModal}>
           <div>
             <div className="qr__code">
               <QRCode
@@ -98,57 +142,6 @@ const UserPage = ({ contract, fetched, folders,account }) => {
             </div>
           </div>
         </Modal>
-        {/* {
-          folderclosed && fetched && !qrMade && <div className="qr">
-          <button onClick={generateQR}>
-          <MdQrCodeScanner 
-          style={{
-            display: 'inline', 
-            transform: 'scale(1.6) translateY(-1px)', 
-            marginRight: '10px'
-          }}/>
-          Generate QR
-          </button>
-          </div>
-        } */}
-        {/* {qrMade && 
-        <Popup 
-        position="top center"
-        
-        modal
-        nested
-        trigger={folderclosed && <div className="qr">
-        <button onClick={generateQR}>
-        <MdQrCodeScanner 
-        style={{
-          display: 'inline', 
-          transform: 'scale(1.6) translateY(-1px)', 
-          marginRight: '10px'
-        }}/>
-        Generate QR
-        </button>
-        </div>}
-        >
-        <div className="qr__code">
-        <QRCode
-        value={account}
-        size={280}
-        />
-        <p className="qr__code__address" >
-        <p>{account}</p>
-        <CopyToClipboard 
-        text = {account} 
-        onCopy={()=>setCopied(true)}
-        >
-        {copied ? 
-          <LuCopyCheck style={{transform: 'scale(1.2) translateY(2px)'}}/>
-          // <img src={require('../../animation_lnu1fmgr_small.gif')}/>
-          :<LuCopy style={{cursor: 'pointer', transform: 'scale(1.2) translateY(2px)'}}/>}
-          </CopyToClipboard>
-          </p>
-          </div>
-          </Popup>
-        } */}
         {folderclosed ? (
           <div>
             {fetched && (
@@ -182,32 +175,72 @@ const UserPage = ({ contract, fetched, folders,account }) => {
                     </button>
                   </div>
                   <div className="row__sections">
-                      {reqs.map((req)=>{ return(
-                        <div key = {req} className="column">
+                      {reqs.map((req, index)=>{ return(
+                        <div key = {index} className="column" style={{backgroundColor: `${index }`}}>
                           <div className="column__header">
-                            <div className="column__title">Company {req}</div>
+                            <div className="image">
+                              <img src={require('./360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg')} alt='companyimage' style={{
+                                width: '40px',
+                                borderRadius: '30px'
+                              }}/>
+                            </div>
+                            <div className="column__title"><p style={{fontSize:'25px', fontWeight: '500'}}>Company {req}</p></div>
                           </div>
-                          <div className="column__fields">
-                            <ul>
-                              <li>Name</li>
-                              <li>Address</li>
-                              <li>DOB</li>
-                              <li>Phone</li>
-                              <li>Image</li>
-                              <span>Folders:</span>
-                              <ul>
-                                <li>Medical</li>
-                                <li>Bank</li>
-                                <li>Academics</li>
-                              </ul>
-                            </ul>
-                          </div>
-                          <div className="column__footer">
-                            <button id="accept">Accept</button>
-                            <button id="decline">Decline</button>
+                          <div className="column__content" style={{
+                            padding: '3rem',
+                            height: '70%'
+                          }}>This company has requested your Adhaar, ...</div>
+                          <div className="column__footer" 
+                            style={{
+                              marginTop: '1rem',
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              marginRight: '2rem'
+                            }}
+                          >
+                            <p 
+                              style={{
+                                cursor: 'pointer', 
+                                padding: '2px 9px',
+                                fontSize: '15px',
+                                fontWeight: 'lighter',
+                                fontFamily: 'sans-serif'
+                              }} 
+                              onClick={()=>{
+                                openReqModal()
+                                setReqContent(<div className="column__fields">
+                                  <div style={{color: 'black'}}>
+                                    <p style={{
+                                      fontSize:'25px', 
+                                      fontWeight: '500',
+                                    }}
+                                    >Company {req}
+                                    </p>
+                                  </div>
+                                <ul>
+                                  <li>Name</li>
+                                  <li>Address</li>
+                                  <li>DOB</li>
+                                  <li>Phone</li>
+                                  <li>Image</li>
+                                  <span>Folders:</span>
+                                  <ul>
+                                    <li>Medical</li>
+                                    <li>Bank</li>
+                                    <li>Academics</li>
+                                  </ul>
+                                </ul>
+                              </div>)
+                                console.log(reqContent)
+                              }}
+                            >
+                              View details</p>
                           </div>
                         </div>
                       )})}
+                      <Modal isOpen={isReqModalOpen} closeModal={closeReqModal}>
+                        {reqContent}
+                      </Modal>
                   </div>
                 </div>
                 <div className="row__3">

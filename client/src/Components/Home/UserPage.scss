@@ -48,7 +48,7 @@
     }
     &__sections{
         margin: 1.5rem;
-        width: auto;
+        // width: 100vw;
         display: flex;
         justify-content: space-between;
     }
@@ -80,17 +80,19 @@
     height: 30.5rem;
     font-weight: 300;
     // background-color: $color-button-dark;
-    border-radius: 5px;
+    border-radius: 3rem;
     transition: all .3s;
     padding: 1rem;
     margin: 0 4rem;
-    cursor: pointer;
+    // cursor: pointer;
     &__header{
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        margin-bottom: 1rem;
+        height: 3rem;
+        // flex-direction: row;
+        // align-items: center;
+        // justify-content: space-between;
+        gap: 1.5rem;
+        margin-bottom: 1rem; 
     }
     &__folder-icon{
         margin-top: 3rem;
@@ -102,6 +104,7 @@
     }
     &__fields{
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         & ul{
@@ -115,7 +118,7 @@
             & li{
                 background: $color-button-dark;
                 border-radius: 30px;
-                margin: 5px 5px;
+                margin: 5px  5px;
                 width: 45%;
             }
             & span{
@@ -168,7 +171,8 @@
     }
     &:hover{
         transform: translateY(-5px);
-        background-color: #0a293c;
+        background-color: #a3dcd4;
+        color: black
     }
 }
 .qr{
@@ -205,14 +209,4 @@
             color: rgb(27, 104, 159);
         }
     }
-}
-.popup-content{
-    width: auto!important;
-    padding: 20px 20px 10px 20px!important;
-    transform: scale(1.5);
-    // text-align: center!important;
-    border-radius: 20px!important;
-    // transition: all 1s!important;
-    animation: popup .2s ease-out;
-    animation-fill-mode: backwards;
 }

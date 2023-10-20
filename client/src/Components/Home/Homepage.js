@@ -11,6 +11,9 @@ import { truncateAddressNavbar } from "../Helpers/truncateAddress";
 import Notifications from '../Cards/Notifications'
 import Push from "../Cards/Push";
 import Loader from "../Helpers/Loader";
+// import React from "react";
+// import {ComplexNavbar} from '../Helpers/Navbar'
+
 const Homepage = ({ setconnected }) => {
   const [signers, setsigners] = useState(null);
   const [connect, setconnect] = useState(false);
@@ -131,45 +134,43 @@ const Homepage = ({ setconnected }) => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
-      {/* <Navbar setconnected = {setconnected}/> */}
       {registered ? (
         <>
-          <div className="flex navbar">
-            {fetched && (
-              <div className="flex absolute left-6  items-center flex-row text-3xl">
-                {userDetails.Image.length === 0 ? (
-                  <PiUserCircle size={37} className="ml-6" />
-                ) : (
-                  <img
-                    src={userDetails.Image}
+          <div className="navbar">
+            <div className="navbar__center">
+              {fetched && (
+              <div className="navbar__left">
+                {userDetails?.Image.length === 0 ? (
+                  <PiUserCircle size={30}/>
+                  ) : (
+                    <img
+                    src={userDetails?.Image}
                     alt="Profile"
-                    className="max-h-[37px] ml-6"
+                    className="max-h-[30px]"
                   />
                 )}
-                <p className="ml-4">{userDetails.Name}</p>
-              </div>
-            )}
-            <div className="navbar__center">
+                  <p className="ml-4">{userDetails?.Name}</p>
+              </div>)}
               <h1 className="navbar__center--brand">Group Project</h1>
-            </div>
-            <div className="navbar__right">
-              {connect && (
-                <button className="navbar__right--notify">
-                <Notifications/>
-                </button>
-              )}
-              {connect ? (
-                <button className="truncate max-w-[250px] flex navbar__right--connect">
-                  accounts : {truncateAddressNavbar(accounts)}
-                </button>
-              ) : (
-                <button
-                  onClick={connectFetch}
-                  className="navbar__right--connect"
-                >
-                  Connect
-                </button>
-              )}
+              <div className="navbar__right">
+                {connect && (
+                  <button className="navbar__right--notify">
+                    <Notifications/>
+                  </button>
+                )}
+                {connect ? (
+                  <button className="navbar__right--connect">
+                    accounts : {truncateAddressNavbar(accounts)}
+                  </button>
+                ) : (
+                  <button
+                    onClick={connectFetch}
+                    className="navbar__right--connect"
+                  >
+                    Connect
+                  </button>
+                )}
+              </div>
             </div>
           </div>
           {
