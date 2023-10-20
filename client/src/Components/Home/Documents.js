@@ -12,7 +12,7 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
   const [uploading, setuploading] = useState(false);
   const [fileName, setfileName] = useState('');
   const hiddenFileInput = useRef(null);
-  const fileTypes = ["PDF", "DOCX"];
+  const fileTypes = ["JPEG", "PNG", "JPG"];
   useEffect(()=>{},[file])
   const uploadFile = async () => {
     if (file) {

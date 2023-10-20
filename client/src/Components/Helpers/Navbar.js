@@ -1,4 +1,5 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import { ethers } from "ethers";
 
 import { PiUserCircle } from "react-icons/pi";
@@ -11,6 +12,8 @@ import Notifications from '../Cards/Notifications'
 
 
 const Navbar = ({setconnected}) => {
+    const navigate = useNavigate();
+
     const [connect, setconnect] = useState(false);
     const [provider, setprovider] = useState(null);
     const [accounts, setaccounts] = useState(null);
@@ -20,6 +23,10 @@ const Navbar = ({setconnected}) => {
     const [userDetails, setuserDetails] = useState(null);
     const [registered, setregistered] = useState(true);
     const [fetched, setfetched] = useState(false);
+
+    useEffect(() => {
+      connect && checkRegistered();
+    }, [contract]);
     const connectFetch = async () => {
         const loadProvider = async (provider) => {
         if (provider) {
@@ -103,9 +110,12 @@ const Navbar = ({setconnected}) => {
         setregistered(true);
       } else if (val === 1) {
         const userData = await contract.companyDetails(accounts);
+        console.log(userData);
         setuserDetails(userData);
         setfetched(true);
         setregistered(true);
+        // navigate('/user')
+
       } else {
         console.log("Not Registered");
         setregistered(false);
@@ -117,43 +127,43 @@ const Navbar = ({setconnected}) => {
   };
   return (
     <div className="flex navbar">
-            {fetched && (
-              <div className="flex absolute left-6  items-center flex-row text-3xl">
-                {userDetails.Image.length === 0 ? (
-                  <PiUserCircle size={37} className="ml-6" />
-                ) : (
-                  <img
-                    src={userDetails.Image}
-                    alt="Profile"
-                    className="max-h-[37px] ml-6"
-                  />
-                )}
-                <p className="ml-4">{userDetails.Name}</p>
-              </div>
-            )}
-            <div className="navbar__center">
-              <h1 className="navbar__center--brand">Group Project</h1>
-            </div>
-            <div className="navbar__right">
-              {connect && (
-                <button className="navbar__right--notify">
-                <Notifications/>
-                </button>
-              )}
-              {connect ? (
-                <button className="truncate max-w-[250px] flex navbar__right--connect">
-                  accounts : {truncateAddressNavbar(accounts)}
-                </button>
-              ) : (
-                <button
-                  onClick={connectFetch}
-                  className="navbar__right--connect"
-                >
-                  Connect
-                </button>
-              )}
-            </div>
-          </div>
+    {fetched && (
+        <div className="flex absolute left-6  items-center flex-row text-3xl">
+        {userDetails.Image.length === 0 ? (
+            <PiUserCircle size={37} className="ml-6" />
+        ) : (
+            <img
+            src={userDetails.Image}
+            alt="Profile"
+            className="max-h-[37px] ml-6"
+            />
+        )}
+        <p className="ml-4">{userDetails.Name}</p>
+        </div>
+    )}
+    <div className="navbar__center">
+        <h1 className="navbar__center--brand">Group Project</h1>
+    </div>
+    <div className="navbar__right">
+        {connect && (
+        <button className="navbar__right--notify">
+        <Notifications/>
+        </button>
+        )}
+        {connect ? (
+        <button className="truncate max-w-[250px] flex p-3 navbar__right--connect">
+            accounts : {truncateAddressNavbar(accounts)}
+        </button>
+        ) : (
+        <button
+            onClick={connectFetch}
+            className="navbar__right--connect"
+        >
+            Connect
+        </button>
+        )}
+    </div>
+    </div>
   )
 }
 

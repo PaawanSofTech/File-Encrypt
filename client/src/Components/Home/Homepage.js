@@ -4,11 +4,11 @@ import { ethers } from "ethers";
 import SignUp from "../Auth/SignUp";
 import { PiUserCircle } from "react-icons/pi";
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json";
-import Navbar from "../Helpers/Navbar";
 import UserPage from "./UserPage";
 import CompanyPage from "./CompanyPage";
 import { truncateAddressNavbar } from "../Helpers/truncateAddress";
 import Notifications from '../Cards/Notifications'
+import Loader from "../Helpers/Loader";
 const Homepage = ({ setconnected }) => {
   const [connect, setconnect] = useState(false);
   const [provider, setprovider] = useState(null);
@@ -19,7 +19,11 @@ const Homepage = ({ setconnected }) => {
   const [userDetails, setuserDetails] = useState(null);
   const [registered, setregistered] = useState(true);
   const [fetched, setfetched] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  useEffect(()=>{},[])
   const connectFetch = async () => {
+    setLoader(true);
     const loadProvider = async (provider) => {
       if (provider) {
         window.ethereum.on("chainChanged", () => {
@@ -93,6 +97,7 @@ const Homepage = ({ setconnected }) => {
       const mssg = JSON.parse(JSON.stringify(res));
       var val = parseInt(mssg.hex, 16);
       console.log("time", val);
+      setLoader(false);
       if (val === 0) {
         const userData = await contract.userDetails();
         console.log(userData);
@@ -122,7 +127,7 @@ const Homepage = ({ setconnected }) => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
-      <Navbar setconnected = {setconnected}/>
+      {/* <Navbar setconnected = {setconnected}/> */}
       {registered ? (
         <>
           <div className="flex navbar">
@@ -163,22 +168,26 @@ const Homepage = ({ setconnected }) => {
               )}
             </div>
           </div>
-
-          {isuser ? (
-            <UserPage 
-              fetched={fetched} 
-              contract={contract} 
-              folders={folders} 
-              account = {accounts}
-              connect = {connect}
-            />
-          ) : (
-            <CompanyPage
-              fetched={fetched}
-              contract={contract}
-              connect={connect}
-            />
-          )}
+          {
+            !loader ? <>
+                
+              {isuser ? (
+                <UserPage 
+                fetched={fetched} 
+                contract={contract} 
+                folders={folders} 
+                  account = {accounts}
+                  connect = {connect}
+                  />
+              ) : (
+                <CompanyPage
+                  fetched={fetched}
+                  contract={contract}
+                  connect={connect}
+                  />
+              )}
+          </> : <><Loader/></>
+        }
         </>
       ) : (
         <SignUp contract={contract} />

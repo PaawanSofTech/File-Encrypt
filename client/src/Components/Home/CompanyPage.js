@@ -3,6 +3,7 @@ import Documents from "./Documents";
 import Folder from "../Cards/Folder";
 import { LuScanLine } from "react-icons/lu";
 import { AiOutlineUser } from 'react-icons/ai';
+import { BsArrowRight} from 'react-icons/bs';
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import "./CompanyPage.scss";
@@ -98,22 +99,33 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
             style={{
               marginTop: "2.5rem",
               borderRadius: "100px",
-              width: '100%'
+              width: '100%',
+              color: 'black',
+              fontWeight: '400',
             }}
-            />
-          <button
-            onSubmit={() => {
-              setResult(inputAddress)
-              console.log("Address", inputAddress);
+            />{inputAddress && 
+              <button
+              onSubmit={() => {
+                setResult(inputAddress)
+                console.log("Address", inputAddress);
             }}
-          >
-            Submit
+            style={{
+              display: 'inline',
+              position: 'absolute',
+              right: '2.5rem',
+              bottom: '2.4rem',
+              transform: 'scale(1.4)',
+              color: 'black',
+            }}
+            >
+            <BsArrowRight/>
           </button>
+          }
         </div> : <><CompanyCard /></>}
       </Modal>
       {folderclosed ? (
         <div>
-          {fetched && (
+        {fetched && (
             <div className="row">
               <div className="row__1">
                 <div className="row__header">
