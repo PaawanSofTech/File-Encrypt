@@ -14,7 +14,7 @@
   }
   
   .modal {
-    background-image: linear-gradient(to bottom, rgb(228, 222, 222),rgb(255, 255, 255));
+    // background-image: linear-gradient(to bottom, rgb(228, 222, 222),rgb(255, 255, 255));
     // border: 1px solid #ccc;
     padding: 1.5rem;
     width: auto;
@@ -35,7 +35,7 @@
     transform: scale(1.4);
     cursor: pointer;
     border-radius: 50px;
-    background: rgb(187, 187, 187);
+    background: rgb(234, 234, 234);
   }
   @keyframes popup {
     0%{
