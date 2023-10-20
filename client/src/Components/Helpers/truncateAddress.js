@@ -4,7 +4,7 @@ export const truncateAddressHistory = (walletAddress) =>{
     return string;
 }
 export const truncateAddressNavbar = (walletAddress) =>{
-    let string = walletAddress.substring(0,14) + '...';
+    let string = walletAddress.substring(0,8) + '...';
     console.log(string)
     return string;
 }

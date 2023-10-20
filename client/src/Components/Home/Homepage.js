@@ -96,8 +96,12 @@ const Homepage = ({ setconnected }) => {
     }
   };
   const registerPush=async()=>{
-    const _userAlice = await PushAPI.initialize(signers, { env: 'staging' });
-    setuserAlice(_userAlice);
+    try {
+      const _userAlice = await PushAPI.initialize(signers, { env: 'staging' });
+      setuserAlice(_userAlice);
+    } catch (error) {
+      
+    }
   }
   const checkRegistered = async () => {
     try {
@@ -121,7 +125,6 @@ const Homepage = ({ setconnected }) => {
         setuserDetails(userData);
         setfetched(true);
         setregistered(true);
-        registerPush();
       } else {
         console.log("Not Registered");
         setregistered(false);
@@ -133,14 +136,26 @@ const Homepage = ({ setconnected }) => {
   };
   useEffect(() => {
     connect && checkRegistered();
-  }, [contract]);
+  }, [contract,provider]);
+  const [colorChange, setColorchange] = useState(false);
+    const changeNavbarColor = () => {
+        if (window.scrollY >= 80) {
+            setColorchange(true);
+            console.log("Chagned color");
+        }
+        else {
+            setColorchange(false);
+            console.log("Chagned back color");
+        }
+    };
+    window.addEventListener('scroll', changeNavbarColor);
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
       {registered ? (
         <>
-          <div className="navbar">
-            <div className="navbar__center">
+          <div className="navbar ">
+            <div className={`navbar__center ${colorChange && "bg-white bg-opacity-20 "}` }>
               <div style={{
                 fontSize: '16px',
                 display: 'flex',
@@ -150,47 +165,90 @@ const Homepage = ({ setconnected }) => {
                 <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
                 <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button>
               </div>
-                <div className="navbar__right">
-                  {connect && (
-                    <button className="navbar__right--notify">
-                      <Notifications userAlice={userAlice}/>
-                    </button>
-                  )}
-                  {connect && fetched ? (
-                    <>
-                      <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
-                        backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
-                      }}>
-                        accounts : {truncateAddressNavbar(accounts)}
-                      </button>
-                      <div className="navbar__left">
-                        {userDetails?.Image.length === 0 ? (
-                          <PiUserCircle size={30}/>
-                          ) : (
-                            <img
-                            src={userDetails?.Image}
-                            alt="Profile"
-                            className="max-h-[30px]"
-                            />
-                            )
-                          }
-                      </div>
-                    </>
-                  ) : (
-                    <button
-                    onClick={connectFetch}
-                    className="navbar__right--connect"
-                    style={{
+              {colorChange && 
+                <div className={`${!colorChange && "transition ease-in-out delay-150" } navbar__right`}>
+                {connect && fetched ? (
+                  <>
+                   <div className="navbar__left">
+                      {userDetails?.Image.length === 0 ? (
+                        <PiUserCircle size={30}/>
+                        ) : (
+                          <img
+                          src={userDetails?.Image}
+                          alt="Profile"
+                          className="max-h-[30px]"
+                          />
+                          )
+                        }
+                    </div>
+                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
                       backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
-                    }}
-                    >
-                      Connect
+                    }}>
+                      accounts : {truncateAddressNavbar(accounts)}
                     </button>
-                  )}
-                </div>
-
+                   
+                  </>
+                ) : (
+                  <button
+                  onClick={connectFetch}
+                  className="navbar__right--connect"
+                  style={{
+                    backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
+                  }}
+                  >
+                    Connect
+                  </button>
+                )}
+                {fetched && isuser && (
+                  <button className="navbar__right--notify">
+                    <Notifications userAlice={userAlice}/>
+                  </button>
+                )}
+              </div>
+              }
             </div>
+            {!colorChange && 
+              <div className={`${colorChange && " transition ease-in-out delay-150" } navbar__right`}>
+                {fetched && isuser  && (
+                  <button className="navbar__right--notify">
+                    <Notifications userAlice={userAlice}/>
+                  </button>
+                )}
+                {connect && fetched ? (
+                  <>
+                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
+                      backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
+                    }}>
+                      accounts : {truncateAddressNavbar(accounts)}
+                    </button>
+                    <div className="navbar__left">
+                      {userDetails?.Image.length === 0 ? (
+                        <PiUserCircle size={30}/>
+                        ) : (
+                          <img
+                          src={userDetails?.Image}
+                          alt="Profile"
+                          className="max-h-[30px]"
+                          />
+                          )
+                        }
+                    </div>
+                  </>
+                ) : (
+                  <button
+                  onClick={connectFetch}
+                  className="navbar__right--connect"
+                  style={{
+                    backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
+                  }}
+                  >
+                    Connect
+                  </button>
+                )}
+              </div>
+            }
           </div>
+          <div style={{ overflowY: "scroll"}}>
           {
             !loader ? <>
                 
@@ -199,6 +257,7 @@ const Homepage = ({ setconnected }) => {
                 fetched={fetched} 
                 contract={contract} 
                 folders={folders} 
+                userAlice={userAlice}
                   account = {accounts}
                   connect = {connect}
                   />
@@ -209,11 +268,13 @@ const Homepage = ({ setconnected }) => {
                   connect={connect}
                   />
               )}
-          </> : < div style={{transform: 'translateY(10rem)'}}><Loader/></div>
-        }
+          </> : 
+          < div style={{transform: 'translateY(10rem)'}}><Loader/></div>
+          }
+          </div>
         </>
       ) : (
-        <SignUp contract={contract} />
+        <SignUp accounts={accounts} contract={contract} provider={provider} />
       )}
     </div>
   );

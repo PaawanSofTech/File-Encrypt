@@ -106,8 +106,9 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
             }}
             />{inputAddress && 
               <button
-              onSubmit={() => {
-                setResult(inputAddress)
+              onClick={() => {
+                setResult(inputAddress);
+                setrequested(true);
                 console.log("Address", inputAddress);
             }}
             style={{
@@ -122,7 +123,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
             <BsArrowRight/>
           </button>
           }
-        </div> : <><CompanyCard /></>}
+        </div> : <><CompanyCard closeModal={closeModal} contract={contract} inputAddress={inputAddress} /></>}
       </Modal>
       {folderclosed ? (
         <div>
