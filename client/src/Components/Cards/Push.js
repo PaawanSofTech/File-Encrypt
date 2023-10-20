@@ -23,11 +23,19 @@ const Push = ({signers,provider}) => {
     }
     const forCompany=async()=>{
       try {
-        await userAlice.channel.send(['eip155:5:0xaF7f488eDf63410AF7B82998A6a96a14dcB8e89d'], { 
+        await userAlice.channel.send(['eip155:5:0x02847D22C33f5F060Bd27e69F1a413AD44cab213'], { 
           notification: {
-            title: 'New try',
-            body: 'Web3 native notification!',
-          }
+            title: 'Testing for value 4: with setting',
+            body: 'Web3 testing first notification!',
+          },
+          payload: {
+            // trigger notification for a setting
+            index: {
+              // index of the notification. 
+              index: 2,
+            }
+          },
+
         });
       } catch (error) {
         console.log("Error",error);

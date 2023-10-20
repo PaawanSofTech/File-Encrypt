@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./Homepage.scss";
 import { ethers } from "ethers";
+import { PushAPI } from '@pushprotocol/restapi'
 import SignUp from "../Auth/SignUp";
 import { PiUserCircle } from "react-icons/pi";
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json";
 import UserPage from "./UserPage";
-// import { PushAPI } from '@pushprotocol/restapi';
 import CompanyPage from "./CompanyPage";
 import { truncateAddressNavbar } from "../Helpers/truncateAddress";
 import Notifications from '../Cards/Notifications'
-import Push from "../Cards/Push";
 import Loader from "../Helpers/Loader";
-// import React from "react";
-// import {ComplexNavbar} from '../Helpers/Navbar'
-
+import Push from "../Cards/Push";
 const Homepage = ({ setconnected }) => {
   const [signers, setsigners] = useState(null);
   const [connect, setconnect] = useState(false);
@@ -26,8 +23,8 @@ const Homepage = ({ setconnected }) => {
   const [registered, setregistered] = useState(true);
   const [fetched, setfetched] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [userAlice, setuserAlice] = useState(null);
 
-  useEffect(()=>{},[])
   const connectFetch = async () => {
     setLoader(true);
     const loadProvider = async (provider) => {
@@ -40,33 +37,33 @@ const Homepage = ({ setconnected }) => {
         });
         const { ethereum } = window;
         try {
-          await ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x13881" }],
-          });
+        await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "5" }],
+        });
         } catch (switchError) {
-          // This error code indicates that the chain has not been added to MetaMask.
-          if (switchError.code === 4902) {
-            // Do something
-            window.ethereum
-              .request({
-                method: "wallet_addEthereumChain",
-                params: [
-                  {
-                    chainId: "0x13881",
-                    chainName: "Polygon",
-                    nativeCurrency: {
-                      name: "Mumbai",
-                      symbol: "MATIC",
-                      decimals: 18,
-                    },
-                    rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
-                    blockExplorerUrls: ["https://mumbai.polygonscan.com"],
-                  },
-                ],
-              })
-              .catch((error) => {});
-          }
+        // This error code indicates that the chain has not been added to MetaMask.
+        if (switchError.code === 4902) {
+        // Do something
+        window.ethereum
+        .request({
+        method: "wallet_addEthereumChain",
+        params: [
+        {
+        chainId: "5",
+        chainName: "Ethereum",
+        nativeCurrency: {
+        name: "Goerli",
+        symbol: "ETH",
+        decimals: 18,
+        },
+        rpcUrls: ["https://rpc.ankr.com/eth_goerli"],
+        blockExplorerUrls: ["https://goerli.etherscan.io"],
+        },
+        ],
+        })
+        .catch((error) => {});
+        }
         }
         await provider.send("eth_requestAccounts", []);
         console.log("Provider",provider);
@@ -74,7 +71,7 @@ const Homepage = ({ setconnected }) => {
         setsigners(signer);
         const address = await signer.getAddress();
         setaccounts(address);
-        let contractAddress = "0xc182C4Ee6D85E0E99DB147908ac3F59cff02973b"; //mumbai
+        let contractAddress = "0x636E9696186D9DD50a409294726Dd8A2D50Aca3A"; //mumbai
         //0x7492502792E8B8efE1503DAE8fa5913a008F5934 latest mumbai
         //0x196d4119944CD005AD917466B8e2e2Ec018FA547 fujin testnet 
         const contractInstance = new ethers.Contract(
@@ -98,6 +95,10 @@ const Homepage = ({ setconnected }) => {
       console.error("MetaMask not Installed");
     }
   };
+  const registerPush=async()=>{
+    const _userAlice = await PushAPI.initialize(signers, { env: 'staging' });
+    setuserAlice(_userAlice);
+  }
   const checkRegistered = async () => {
     try {
       const res = await contract.ifRegistered();
@@ -114,11 +115,13 @@ const Homepage = ({ setconnected }) => {
         setfetched(true);
         setisuser(true);
         setregistered(true);
+        registerPush();
       } else if (val === 1) {
         const userData = await contract.companyDetails(accounts);
         setuserDetails(userData);
         setfetched(true);
         setregistered(true);
+        registerPush();
       } else {
         console.log("Not Registered");
         setregistered(false);
@@ -152,25 +155,25 @@ const Homepage = ({ setconnected }) => {
                   <p className="ml-4">{userDetails?.Name}</p>
               </div>)}
               <h1 className="navbar__center--brand">Group Project</h1>
-              <div className="navbar__right">
-                {connect && (
-                  <button className="navbar__right--notify">
-                    <Notifications/>
-                  </button>
-                )}
-                {connect ? (
-                  <button className="navbar__right--connect">
-                    accounts : {truncateAddressNavbar(accounts)}
-                  </button>
-                ) : (
-                  <button
-                    onClick={connectFetch}
-                    className="navbar__right--connect"
-                  >
-                    Connect
-                  </button>
-                )}
-              </div>
+            </div>
+            <div className="navbar__right">
+              {connect && (
+                <button className="navbar__right--notify">
+                <Notifications userAlice={userAlice}/>
+                </button>
+              )}
+              {connect ? (
+                <button className="truncate max-w-[250px] flex navbar__right--connect">
+                  accounts : {truncateAddressNavbar(accounts)}
+                </button>
+              ) : (
+                <button
+                  onClick={connectFetch}
+                  className="navbar__right--connect"
+                >
+                  Connect
+                </button>
+              )}
             </div>
           </div>
           {
@@ -197,7 +200,7 @@ const Homepage = ({ setconnected }) => {
       ) : (
         <SignUp contract={contract} />
       )}
-      <Push provider={provider} signers={signers}/>
+      <Push signers={signers} provider={provider}/>
     </div>
   );
 };
