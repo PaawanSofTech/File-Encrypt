@@ -63,9 +63,11 @@
     gap: 30px;
     & .row-h{
         // width: 100%;
+        color: black;
         height: 5rem;
-        font-weight: 300;
-        background-color: $color-button-dark;
+        font-weight: 400;
+        background-image: linear-gradient(-30deg,#213DD9 ,#87DDFD);
+        // background-color: $color-button-dark;
         border-radius: 5px;
         transition: all .3s;
         padding: 1rem;
@@ -90,7 +92,7 @@
         height: 3rem;
         // flex-direction: row;
         // align-items: center;
-        // justify-content: space-between;
+        justify-content: center;
         gap: 1.5rem;
         margin-bottom: 1rem; 
     }
@@ -134,7 +136,7 @@
             }
         }
         border-bottom: 1px solid $color-button-primary;
-        padding-bottom: 20px;
+        // padding-bottom: 20px;
         // width: 80%;
     }
     &__footer{
@@ -210,6 +212,71 @@
             font-weight: 400;
             font-size: 1.05rem;
             color: rgb(27, 104, 159);
+        }
+    }
+}
+.popup{
+    width: 50rem;
+    height: 30rem;
+    padding: 2rem;
+    font-weight: 400;
+    font-size: 13px;
+    &__up{
+        text-align: center;
+        display: flex;
+        .image{
+            width: 15rem;
+            height: 10rem;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+        }
+        .details{
+            width:100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            & > *{
+                width: 40%;
+                margin: 5px;
+                padding: 5px;
+                // border-radius: 30px;
+                // background-image: linear-gradient(to right, rgba(white,30%), rgba(white,30%));
+            }
+        }
+    }
+    &__down{
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+        // height: 13rem;
+        padding: 1rem;
+        text-align: center;
+        margin-top: 2rem;
+        & > *{
+            margin-bottom: 1rem;
+            width: 100%;
+            padding: 10px;
+            border-radius: 1rem;
+            background-image: linear-gradient(to right, rgba(white,30%), rgba(white,30%));
+        }
+    }
+}
+.submit{
+    &__accept{
+        font-size: 15px;
+        &:hover{
+            background-image: linear-gradient(to right, rgba(white,30%), rgba(white,30%));
+            border-radius: 90px;
+        }
+    }
+    &__decline{
+        font-size: 15px;
+        
+        &:hover{
+            background-image: linear-gradient(to right, rgba(white,30%), rgba(white,30%));
+            border-radius: 90px;
         }
     }
 }

@@ -9,7 +9,7 @@ const Loader = () => {
         <div className='loader__text'>
         Loading 
         </div>
-        <div className='loader__spinner' style={{ transform: 'translateY(1px)'}}>
+        <div className='loader__spinner' style={{ }}>
         <ImSpinner2/>
 
         </div>

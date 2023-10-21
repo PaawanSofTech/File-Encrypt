@@ -10,6 +10,7 @@ import CompanyPage from "./CompanyPage";
 import { truncateAddressNavbar } from "../Helpers/truncateAddress";
 import Notifications from '../Cards/Notifications'
 import Loader from "../Helpers/Loader";
+import Logo from '../Cards/Logo'
 import Push from "../Cards/Push";
 const Homepage = ({ setconnected }) => {
   const [signers, setsigners] = useState(null);
@@ -148,79 +149,52 @@ const Homepage = ({ setconnected }) => {
             console.log("Chagned back color");
         }
     };
-    window.addEventListener('scroll', changeNavbarColor);
+    // window.addEventListener('scroll', changeNavbarColor);
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
       {registered ? (
         <>
+        <div className="logo" style={{
+          width: 'auto',
+          marginTop: '3rem',
+          paddingLeft: '4rem',
+          height: '6rem',
+          display: 'flex'
+        }}>
+          <Logo/>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          paddingLeft:'2.8rem',
+          fontSize: '30px',
+          // fontFamily: 'serrif',
+          fontWeight: '600'
+        }}>
+           File Guardian
+          </div>
+        </div>
           <div className="navbar ">
-            <div className={`navbar__center ${colorChange && "bg-white bg-opacity-20 "}` }>
+            <div className={`navbar__center`}>
               <div style={{
                 fontSize: '16px',
                 display: 'flex',
                 gap: '3rem'
               }}>
+                {isuser ? <>
                 <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>My folders</button>
                 <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
                 <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button>
+                </> : 
+                <>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>Active users</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                {/* <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button> */}
+                
+                </>}
               </div>
-              {colorChange && 
-                <div className={`${!colorChange && "transition ease-in-out delay-150" } navbar__right`}>
-                {connect && fetched ? (
-                  <>
-                   <div className="navbar__left">
-                      {userDetails?.Image.length === 0 ? (
-                        <PiUserCircle size={30}/>
-                        ) : (
-                          <img
-                          src={userDetails?.Image}
-                          alt="Profile"
-                          className="max-h-[30px]"
-                          />
-                          )
-                        }
-                    </div>
-                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
-                      backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
-                    }}>
-                      accounts : {truncateAddressNavbar(accounts)}
-                    </button>
-                   
-                  </>
-                ) : (
-                  <button
-                  onClick={connectFetch}
-                  className="navbar__right--connect"
-                  style={{
-                    backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
-                  }}
-                  >
-                    Connect
-                  </button>
-                )}
-                {fetched && isuser && (
-                  <button className="navbar__right--notify">
-                    <Notifications userAlice={userAlice}/>
-                  </button>
-                )}
-              </div>
-              }
-            </div>
-            {!colorChange && 
-              <div className={`${colorChange && " transition ease-in-out delay-150" } navbar__right`}>
+              <div className={`${" transition ease-in-out delay-150" } navbar__right`} style={{}}>
                 {fetched && isuser  && (
-                  <button className="navbar__right--notify">
-                    <Notifications userAlice={userAlice}/>
-                  </button>
-                )}
-                {connect && fetched ? (
-                  <>
-                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
-                      backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
-                    }}>
-                      accounts : {truncateAddressNavbar(accounts)}
-                    </button>
                     <div className="navbar__left">
                       {userDetails?.Image.length === 0 ? (
                         <PiUserCircle size={30}/>
@@ -233,19 +207,30 @@ const Homepage = ({ setconnected }) => {
                           )
                         }
                     </div>
+                )}
+                {connect && fetched ? (
+                  <>
+                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
+                    }}>
+                      accounts : {truncateAddressNavbar(accounts)}
+                    </button>
+                      <button className="navbar__right--notify">
+                        <Notifications userAlice={userAlice}/>
+                      </button>
                   </>
                 ) : (
                   <button
                   onClick={connectFetch}
                   className="navbar__right--connect"
                   style={{
-                    backgroundImage: 'linear-gradient(to right bottom, #c9c9c9, #b8b8b8)'
                   }}
                   >
                     Connect
                   </button>
                 )}
               </div>
+            </div>
+            {
             }
           </div>
           <div style={{ overflowY: "scroll"}}>
@@ -269,7 +254,7 @@ const Homepage = ({ setconnected }) => {
                   />
               )}
           </> : 
-          < div style={{transform: 'translateY(10rem)'}}><Loader/></div>
+          < div><Loader/></div>
           }
           </div>
         </>

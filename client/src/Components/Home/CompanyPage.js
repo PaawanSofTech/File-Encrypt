@@ -85,7 +85,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   return (
     <div>
       {!isModalOpen && connect &&
-      <div className="qr">
+      <div className="company_qr">
       <button onClick={openModal}>
          <p>Scan QR
           <LuScanLine
@@ -168,7 +168,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                 </div>
                 <div className="company_row__sections">
                   {users.map((user,index) => {return(
-                    <div className="company_column" style={{backgroundImage: `${setBgColor(index)}`, cursor: 'pointer'}}
+                    <div className="company_column" key={index} style={{backgroundImage: `${setBgColor(index)}`}}
                       onClick = {()=>{
                         openReqModal()
                         setbg(setBgColor(index))
@@ -203,7 +203,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                   )})}
                 </div>
               </div>
-              <div className="company_row__3">
+              {/* <div className="company_row__3">
                 <div className="company_row__header">
                   <div className="company_row__title">History</div>
                   <button className="company_row__btn">
@@ -215,7 +215,7 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                   <div className="column"></div>
                   <div className="column"></div>
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
         </div>

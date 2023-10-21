@@ -24,6 +24,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
   const [activecompanyDetails, setactivecompanyDetails] = useState([]);
   const [companyDetails, setcompanyDetails] = useState([]);
   const [activeCompData, setactiveCompData] = useState([]);
+  const [bg, setbg] = useState('');
   const openQrModal = () => {
     setisQrModalOpen(true);
     setQrMade(true)
@@ -58,12 +59,12 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
   ]
   const setBgColor = (index) => {
     if(index%3 === 0){
-      return 'red'
+      return 'linear-gradient(to bottom, #87efa2, #0bb79a)'
     }
     else if(index%3 === 1){
-      return 'blue'
+      return 'linear-gradient(to bottom, #f4c402, #f56701)'
     }else{
-      return 'green'
+      return 'linear-gradient(to bottom, #fa9f88, #fa4582ff)'
     }
   }
   const openFolder = async (i) => {
@@ -160,7 +161,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
           </button>
         </div>
         }
-        <Modal isOpen={isQrModalOpen} closeModal={closeQrModal}>
+        <Modal isOpen={isQrModalOpen} closeModal={closeQrModal} bg={'linear-gradient(to bottom, rgb(234, 234, 234), rgb(179, 179, 179))'}>
           <div>
             <div className="qr__code">
               <QRCode
@@ -182,7 +183,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
             </div>
           </div>
         </Modal>
-        <Modal isOpen={isReqModalOpen} closeModal={closeReqModal}>
+        <Modal isOpen={isReqModalOpen} closeModal={closeReqModal} bg={bg}>
           {reqContent}
         </Modal>
         {folderclosed ? (
@@ -199,13 +200,16 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                   <div className="row__sections">
                     {folders.map((folder, i) => {
                       return (
-                        <div
-                        onClick={() => {
-                          openFolder(i);
-                        }}
+                        <div className='column'
+                          style={{backgroundImage: `${setBgColor(i)}`, cursor: 'pointer', color: 'black'}}
+                          onClick={() => {
+                            openFolder(i);
+                          }}
                         >
                           <Folder contract={contract} folder={folder} />
+
                         </div>
+                      
                       );
                     })}
                   </div>
@@ -220,7 +224,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                   <div className="row__sections">
                       {reqs.map((req, index)=>{ 
                         return(
-                        <div key = {index} className="column" style={{backgroundColor: `${index }`}}>
+                        <div key = {index} className="column" style={{backgroundImage: `${setBgColor(index)}`, cursor: 'pointer'}}>
                           <div className="column__header">
                             <div className="image">
                               <img src={require('./360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg')} alt='companyimage' style={{
@@ -228,7 +232,11 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                                 borderRadius: '30px'
                               }}/>
                             </div>
-                            <div className="column__title"><p style={{fontSize:'25px', fontWeight: '500'}}>{companyDetails.length === 0 ? <p>Company</p> : <p>{companyDetails[index].Name}</p>}</p></div>
+                            <div className="column__title" style={{display: 'flex'}}>
+                              <p style={{fontSize:'25px', fontWeight: '500'}}>
+                                {companyDetails.length === 0 ? <>Company</> : <>{companyDetails[index].Name}</>}
+                              </p>
+                            </div>
                           </div>
                           <div className="column__content" style={{
                             padding: '3rem',
@@ -252,29 +260,48 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                               }} 
                               onClick={()=>{
                                 openReqModal()
-                                setReqContent(<div className="column__fields">
-                                  <div style={{color: 'black'}}>
-                                    <p style={{
-                                      fontSize:'25px', 
-                                      fontWeight: '500',
-                                    }}
-                                    >{companyDetails.length === 0 ? <p>Company</p> : <p>{companyDetails[index].Name}</p>}
-                                    </p>
+                                setbg(setBgColor(index))
+                                setReqContent(<div className="column__fields"  style={{border: 'none', color:'black'}}>
+                                  <div className="popup">
+                                    <div className="popup__up">
+                                      <div className="image">
+                                        <p style={{
+                                          fontSize:'25px', 
+                                          fontWeight: '500',
+                                          display: 'flex',
+                                          alignItems: 'center'
+                                        }}>{companyDetails.length === 0 ? <p>Company</p> : <p>{companyDetails[index].Name}</p>}
+                                          </p>
+                                      </div>
+                                      <div className="details">
+
+                                        {req.Name && <div>Name</div>}
+                                        {req.Image&& <div>Image</div>}
+                                        {req.DOB && <div>DOB</div>}
+                                        {req.Phone && <div>Phone</div>}
+                                      </div>
+                                    </div>
+                                    <div className="popup__down">
+                                      {req.Folders[0] && <div>Medical</div>}
+                                      {req.Folders[1] && <div>Bank</div>}
+                                      {req.Folders[2] && <div>Academics</div>}
+                                    </div>
                                   </div>
-                                <ul>
-                                  {req.Name && <li>Name</li>}
-                                  {req.Image&& <li>Image</li>}
-                                  {req.DOB && <li>DOB</li>}
-                                  {req.Phone && <li>Phone</li>}
-                                  <span>Folders:</span>
-                                    <ul>
-                                      {req.Folders[0] && <li>Medical</li>}
-                                      {req.Folders[1] && <li>Bank</li>}
-                                      {req.Folders[2] && <li>Academics</li>}
-                                    </ul>
-                                </ul>
-                                <button onClick={()=>{acceptRequest(index)}}>Accept</button>
-                                <button onClick={()=>{rejectRequest(index)}}>Decline</button>
+                                  <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    width: '100%',
+                                    height: '3rem',
+                                    gap: '2rem',
+                                    padding: '0 1rem'
+                                  }}>
+                                    <button onClick={()=>{acceptRequest(index)}} className="submit__accept" style={{
+                                      width: '50%'
+                                    }}>Accept</button>
+                                    <button onClick={()=>{rejectRequest(index)}} className="submit__decline" style={{
+                                      width: '50%'
+                                    }}>Decline</button>
+                                  </div>
                               </div>)
                                 console.log(reqContent)
                               }}
@@ -354,7 +381,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
           />
           )}
       </div>
-      : < div style={{transform: 'translateY(10rem)'}}><Loader/></div>
+      : < div><Loader/></div>
       
     }
     </>

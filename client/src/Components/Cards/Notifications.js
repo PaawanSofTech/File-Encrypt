@@ -60,7 +60,9 @@ const Notifications = ({userAlice}) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
     >
-        <Menu.Items className="absolute right-0 z-10 mt-2 text-white w-[500px] border-opacity-20 origin-top-right bg-[#0a2c3f] shadow-lg ring-1 ring-gray-600 ring-opacity-5 rounded-xl focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 mt-2 text-black w-[500px] border-opacity-20 origin-top-right shadow-lg ring-1 ring-gray-600 ring-opacity-5 rounded-xl focus:outline-none" style={{
+            backgroundImage: 'linear-gradient(to top,#213DD9 ,#87DDFD)',
+        }}>
         <div className="py-1 overflow-auto max-h-screen flex flex-col items-center justify-center">
             <div className=" text-lg items-center flex border-opacity-30 w-full relative  px-4 py-2"
                 style={{
@@ -138,6 +140,7 @@ const Notifications = ({userAlice}) => {
             :
             <div>
                 {notifications.map((message,key)=>{
+                    if(key > 4){return null;}
                 return(
                     <Menu.Item>
                     {({ active }) => (

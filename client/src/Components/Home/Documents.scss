@@ -8,7 +8,7 @@
     // grid-column: 3;
     font-size: 1.8rem;
     &__column{
-        background-color: #0d374f;
+        background-image: linear-gradient(to top,#213DD9 ,#87DDFD);
         height: 30rem;
         border-radius: 1rem;
         width: 30rem;
@@ -25,7 +25,7 @@
             }
             &--title{
                 opacity: 0;
-                margin-top: 4rem;
+                margin-top: 2rem;
                 font-weight: 400;
             }
         }
