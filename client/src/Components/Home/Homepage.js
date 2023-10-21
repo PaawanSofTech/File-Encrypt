@@ -12,6 +12,9 @@ import Notifications from '../Cards/Notifications'
 import Loader from "../Helpers/Loader";
 import Logo from '../Cards/Logo'
 import Push from "../Cards/Push";
+import './LandingPage.scss'
+import Lottie from 'react-lottie';
+import animationData from './Lottie/security-research.json';
 const Homepage = ({ setconnected }) => {
   const [signers, setsigners] = useState(null);
   const [connect, setconnect] = useState(false);
@@ -153,7 +156,8 @@ const Homepage = ({ setconnected }) => {
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
-      {registered ? (
+    
+      {connect ? (
         <>
         <div className="logo" style={{
           width: 'auto',
@@ -233,34 +237,152 @@ const Homepage = ({ setconnected }) => {
             {
             }
           </div>
-          <div style={{ overflowY: "scroll"}}>
           {
-            !loader ? <>
-                
-              {isuser ? (
-                <UserPage 
-                fetched={fetched} 
-                contract={contract} 
-                folders={folders} 
-                userAlice={userAlice}
+            registered ?
+            <div style={{ overflowY: "scroll"}}>
+            {
+              !loader ? <>
+                  
+                {isuser ? (
+                  <UserPage 
+                  fetched={fetched} 
+                  contract={contract} 
+                  folders={folders} 
+                  userAlice={userAlice}
                   account = {accounts}
                   connect = {connect}
                   />
-              ) : (
-                <CompanyPage
-                  fetched={fetched}
-                  contract={contract}
-                  connect={connect}
-                  />
-              )}
-          </> : 
-          < div><Loader/></div>
+                  ) : (
+                  <CompanyPage
+                    fetched={fetched}
+                    contract={contract}
+                    connect={connect}
+                    />
+                    )}
+            </> : 
+            < div><Loader/></div>
+            }
+            </div>
+             
+            :
+            <SignUp accounts={accounts} contract={contract} provider={provider} />
           }
-          </div>
+
+          
         </>
+        
       ) : (
-        <SignUp accounts={accounts} contract={contract} provider={provider} />
-      )}
+        <>
+          <div className="navbar ">
+            <div className={`navbar__center`}>
+              <div style={{
+                fontSize: '16px',
+                display: 'flex',
+                gap: '3rem'
+              }}>
+                {isuser ? <>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>My folders</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button>
+                </> : 
+                <>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>Active users</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                {/* <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button> */}
+                
+                </>}
+              </div>
+              <div className={`${" transition ease-in-out delay-150" } navbar__right`} style={{}}>
+                {fetched && isuser  && (
+                    <div className="navbar__left">
+                      {userDetails?.Image.length === 0 ? (
+                        <PiUserCircle size={30}/>
+                        ) : (
+                          <img
+                          src={userDetails?.Image}
+                          alt="Profile"
+                          className="max-h-[30px]"
+                          />
+                          )
+                        }
+                    </div>
+                )}
+                {connect && fetched ? (
+                  <>
+                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
+                    }}>
+                      accounts : {truncateAddressNavbar(accounts)}
+                    </button>
+                      <button className="navbar__right--notify">
+                        <Notifications userAlice={userAlice}/>
+                      </button>
+                  </>
+                ) : (
+                  <button
+                  onClick={connectFetch}
+                  className="navbar__right--connect"
+                  style={{
+                  }}
+                  >
+                    Connect
+                  </button>
+                )}
+              </div>
+            </div>
+            {
+            }
+          </div>
+          <div className='container'>
+            <div className="logo" style={{
+            width: 'auto',
+            marginTop: '3rem',
+            paddingLeft: '4rem',
+            height: '6rem',
+            display: 'flex'
+          }}>
+            <Logo/>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            paddingLeft:'2.8rem',
+            fontSize: '30px',
+            // fontFamily: 'serrif',
+            fontWeight: '600'
+          }}>
+            File Guardian
+            </div>
+            </div>
+            <div className="container__content">
+              <div className='container__content__text'>
+                  <div className='header'>
+                  Guardians of Your Confidentiality: Protecting Your Important Documents
+                  </div>
+                  <div className='summary'>
+                  Take control of the privacy of your precious documents by using File Guardian, ensuring that only those you've granted access can use them.
+                  </div>
+              </div>
+              <div className='container__content__anim'>
+                  {/* <script src='./security-research.json'></script> */}
+                  {/* <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+      <lottie-player src="https://lottie.host/6f4ee854-3625-4849-8985-e423a0752949/hZWZsrb0zk.json" background="transparent" speed="1" style={{width: '300px', height: '300px'}} direction="1" mode="normal" loop controls autoplay>
+      </lottie-player> */}
+                  <Lottie 
+                      options={{loop: true,
+                        autoplay: true,
+                        animationData: animationData,
+                        rendererSettings: {
+                          preserveAspectRatio: "xMidYMid slice"
+                        }
+                      }}
+                      height={400}
+                      width={450}
+                      />
+              </div>
+        </div>
+    </div>
+        </>
+        )}
     </div>
   );
 };

@@ -19,8 +19,10 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
   const [copied, setCopied] = useState(false);
   const [isQrModalOpen, setisQrModalOpen] = useState(false);
   const [isReqModalOpen, setisReqModalOpen] = useState(false);
+  const [isActiveCompanyOpen, setisActiveCompanyOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [reqContent, setReqContent] = useState('');
+  const [activeCompaniesContent, setactiveCompaniesContent] = useState('');
   const [activecompanyDetails, setactivecompanyDetails] = useState([]);
   const [companyDetails, setcompanyDetails] = useState([]);
   const [activeCompData, setactiveCompData] = useState([]);
@@ -34,10 +36,15 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
   };
   const openReqModal = () => {
     setisReqModalOpen(true);
-    setQrMade(true)
   };
   const closeReqModal = () => {
     setisReqModalOpen(false);
+  };
+  const openActiveCompanyModal = () => {
+    setisActiveCompanyOpen(true);
+  };
+  const closeActiveCompanyModal = () => {
+    setisActiveCompanyOpen(false);
   };
   const [reqs, setreqs] = useState(['1','2','3']);
   const companies = [
@@ -127,7 +134,8 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
         activecompanyDetails.push(company);
       }
       setactivecompanyDetails(activecompanyDetails);
-      activeCompData(res);
+      setactiveCompData(res);
+      // setactiveCompData(['hg','hhg','ghg']);
     } catch (error) {
       console.log("Error");
     }
@@ -185,6 +193,9 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
         </Modal>
         <Modal isOpen={isReqModalOpen} closeModal={closeReqModal} bg={bg}>
           {reqContent}
+        </Modal>
+        <Modal isOpen={isActiveCompanyOpen} closeModal={closeActiveCompanyModal} bg={bg}>
+          {activeCompaniesContent}
         </Modal>
         {folderclosed ? (
           <div style={{transform: 'translateY(4rem)'}}>
@@ -322,7 +333,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                   </div>
                   <div className="row__sections">
                       {activeCompData.map((active,key)=>{ return(
-                        <div key = {key} className="column" style={{color: 'black'}}>
+                        <div key = {key} className="column" style={{color: 'black', backgroundImage: `${setBgColor(key)}`, cursor: 'pointer'}}>
                           <div className="column__header">
                             <div className="column__title">{activecompanyDetails.length === 0 ? <p>Company</p> : <p>{activecompanyDetails[key].Name}</p>} </div>
                           </div>
