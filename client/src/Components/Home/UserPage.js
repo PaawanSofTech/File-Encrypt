@@ -224,7 +224,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                   <div className="row__sections">
                       {reqs.map((req, index)=>{ 
                         return(
-                        <div key = {index} className="column" style={{backgroundImage: `${setBgColor(index)}`, cursor: 'pointer'}}>
+                        <div key = {index} className="column" style={{backgroundImage: `${setBgColor(index)}`, cursor: 'pointer' , color: 'black'}}>
                           <div className="column__header">
                             <div className="image">
                               <img src={require('./360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg')} alt='companyimage' style={{
@@ -322,7 +322,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                   </div>
                   <div className="row__sections">
                       {activeCompData.map((active,key)=>{ return(
-                        <div key = {key} className="column">
+                        <div key = {key} className="column" style={{color: 'black'}}>
                           <div className="column__header">
                             <div className="column__title">{activecompanyDetails.length === 0 ? <p>Company</p> : <p>{activecompanyDetails[key].Name}</p>} </div>
                           </div>
@@ -345,26 +345,6 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
                           </div>
                         </div>
                       )})}
-                  </div>
-                </div>
-                <div className="row__4">
-                  <div className="row__header">
-                    <div className="row__title">History</div>
-                    <button className="row__btn">
-                      View all <span>&rarr;</span>
-                    </button>
-                  </div>
-                  <div className="row__sections-h">
-                    {companies.map((company)=>{return (
-                      
-                      <div  className="row-h">
-                        <div>{company.name}</div>
-                        <div>{truncateAddressHistory(company.address)}</div>
-                        <div>{company.firstAccess}</div>
-                      </div>
-                    )
-                    })}
-                    <div></div>
                   </div>
                 </div>
               </div>
