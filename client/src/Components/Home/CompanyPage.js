@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Documents from "./Documents";
 import Folder from "../Cards/Folder";
+import { PushAPI } from '@pushprotocol/restapi'
 import { LuScanLine } from "react-icons/lu";
 import { AiOutlineUser } from 'react-icons/ai';
 import { BsArrowRight} from 'react-icons/bs';
@@ -11,9 +12,9 @@ import CompanyCard from "../Cards/CompanyCard";
 import QrReader from "react-qr-scanner";
 import Modal from "../Helpers/Modal";
 const delay = 100;
-const CompanyPage = ({ contract, fetched, folders, connect }) => {
+const CompanyPage = ({ contract,signers, userDetails,fetched, folders, connect }) => {
   const [folderclosed, setfolderclosed] = useState(true);
-  const [docs, setdocs] = useState(null);
+  const [docs, setdocs] = useState([]);
   const [val, setval] = useState(0);
   const [scan, setScan] = useState(false);
   const [requested, setrequested] = useState( false)
@@ -24,8 +25,14 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
   const [userContent, setuserContent] = useState('');
   const [bg, setbg] = useState('');
 
-  const openReqModal = () => {
-    setisReqModalOpen(true);
+  const openReqModal = async(address) => {
+    const result = await documentAccessed(address);
+    console.log("Filesigned",result);
+    if(result){
+      setisReqModalOpen(true);
+    } else{
+      closeReqModal();
+    }
   };
   const closeReqModal = () => {
     setisReqModalOpen(false);
@@ -40,13 +47,31 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
     setInputAddress('')
     setrequested(false)
   };
+  const [openDocs, setopenDocs] = useState(false);
+  const [users, setusers] = useState([]);
 
-  const users = [
-    {name: 'Username 1'},
-    {name: 'Username 2'},
-    {name: 'Username 3'},
-  ]
-
+  const getUsers= async()=>{
+    try {
+      const res = await contract.returnUsersData();
+      console.log("Here",res);
+      getDocs(res);
+      setusers(res);
+    } catch (error) {
+    }
+  }
+  const getDocs=async(res)=>{
+    var docs = [];
+    try {
+      for(var i =0 ;i<res.length;i++){
+        const doc = await contract.returnUserDocs(res[i].Address);
+        docs.push(doc);
+        }
+        console.log("docs",docs);
+      } catch (error) {
+        console.log("Error",error);
+      }
+      setdocs(docs);
+    }
   const openFolder = async (i) => {
     try {
       // const res = await contract.returnDocs(i);
@@ -58,6 +83,28 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
       console.log("Error");
     }
   };
+  const documentAccessed=async(address)=>{
+    try {
+      const userAlice = await PushAPI.initialize(signers, { env: 'staging' });
+      await userAlice.channel.send([`eip155:5:${address}`], { 
+        notification: {
+          title: `Your Files Were Accessed by ${userDetails.Name}`,
+          body: 'Tap to Open ',
+        },
+        payload: {
+          // trigger notification for a setting
+          index: {
+            // index of the notification. 
+            index: 2,
+          }
+        },
+      });
+      return true;
+    } catch (error) {
+      console.log("erro");
+      return false;
+    }
+  }
   const openScanner = () => {
     setScan(true);
     setBgColor('white');
@@ -82,6 +129,9 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
       return 'linear-gradient(to bottom, #87efa2, #0bb79a)'
     }
   }
+  useEffect(()=>{
+    getUsers();
+  },[])
   return (
     <div>
       {!isModalOpen && connect &&
@@ -170,30 +220,43 @@ const CompanyPage = ({ contract, fetched, folders, connect }) => {
                   {users.map((user,index) => {return(
                     <div className="company_column" key={index} style={{backgroundImage: `${setBgColor(index)}`}}
                       onClick = {()=>{
-                        openReqModal()
-                        setbg(setBgColor(index))
+                        openReqModal(user.Address);
+                        // documentAccessed();
+                        setbg(setBgColor(index));
+                        var phone;
+                        if(user.Phone.length !==0){
+                          const mssg = JSON.parse(JSON.stringify(user.Phone));
+                          phone = parseInt(mssg.hex, 16);
+                        }
                         setuserContent(<div className="column__fields" style={{border: 'none', color:'black'}}>
                           <div className="popup">
                             <div className="popup__up">
                               {/* <img src='' alt=".image" className="image" style={{borderRadius: '4rem'}}/> */}
                               <div className="image"><AiOutlineUser size={105}/></div>
                               <div style={{display: 'flex'}} className="details">
-                                <div>Name</div>
-                                <div>Address</div>
-                                <div>DOB</div>
-                                <div>Phone</div>
+                                {user.Name.length !== 0 && <div>{user.Name}</div>}
+                                {user.Image.length !== 0 && <div>{user.Image}</div>}
+                                {user.DOB.length !== 0 && <div>{user.DOB}</div>}
+                                {user.Phone.length !== 0 && <div>{phone}</div>}
                               </div>
                             </div>
-                            <div className="popup__down ">
-                              <div>Medical</div>
-                              <div>Academics</div>
-                              <div>Bank</div>
+                            <div className=" popup__down ">
+                              <div>Files</div>
+                              <div className="grid grid-cols-3  overflow-auto">
+                                {docs[index].map((doc,key)=>{
+                                  return(
+                                    <img className="max-w-[120px] max-h-[120px] m-3" src={doc.Hash} alt="document"/>
+                                  )
+                                })}
+                              </div>
                             </div>
                           </div>
                       </div>)
                       }}
                     >
-                      <h1 style={{textAlign: 'center'}}>{user.name}</h1>
+                      <h1 style={{textAlign: 'center'}}>
+                        {user === null ? <p>User</p> : <p>{user.Name}</p>}
+                        </h1>
                       <div style={{
                         textAlign: 'center',
                         display: 'flex',

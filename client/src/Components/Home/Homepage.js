@@ -40,7 +40,7 @@ const Homepage = ({ setconnected }) => {
         try {
         await ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "5" }],
+        params: [{ chainId: "0x5" }],
         });
         } catch (switchError) {
         // This error code indicates that the chain has not been added to MetaMask.
@@ -51,7 +51,7 @@ const Homepage = ({ setconnected }) => {
         method: "wallet_addEthereumChain",
         params: [
         {
-        chainId: "5",
+        chainId: "0x5",
         chainName: "Ethereum",
         nativeCurrency: {
         name: "Goerli",
@@ -248,6 +248,8 @@ const Homepage = ({ setconnected }) => {
                   />
               ) : (
                 <CompanyPage
+                  userDetails={userDetails}
+                  signers = {signers}
                   fetched={fetched}
                   contract={contract}
                   connect={connect}
