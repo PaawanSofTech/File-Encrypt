@@ -12,7 +12,7 @@ import CompanyCard from "../Cards/CompanyCard";
 import QrReader from "react-qr-scanner";
 import Modal from "../Helpers/Modal";
 const delay = 100;
-const CompanyPage = ({ contract,signers, userDetails,fetched, folders, connect }) => {
+const CompanyPage = ({ contract,userAlice, userDetails,fetched, folders, connect }) => {
   const [folderclosed, setfolderclosed] = useState(true);
   const [docs, setdocs] = useState([]);
   const [val, setval] = useState(0);
@@ -85,7 +85,6 @@ const CompanyPage = ({ contract,signers, userDetails,fetched, folders, connect }
   };
   const documentAccessed=async(address)=>{
     try {
-      const userAlice = await PushAPI.initialize(signers, { env: 'staging' });
       await userAlice.channel.send([`eip155:5:${address}`], { 
         notification: {
           title: `Your Files Were Accessed by ${userDetails.Name}`,
@@ -101,7 +100,7 @@ const CompanyPage = ({ contract,signers, userDetails,fetched, folders, connect }
       });
       return true;
     } catch (error) {
-      console.log("erro");
+      console.log("erro",error);
       return false;
     }
   }
@@ -245,7 +244,7 @@ const CompanyPage = ({ contract,signers, userDetails,fetched, folders, connect }
                               <div className="grid grid-cols-3  overflow-auto">
                                 {docs[index].map((doc,key)=>{
                                   return(
-                                    <img className="max-w-[120px] max-h-[120px] m-3" src={doc.Hash} alt="document"/>
+                                    <img className="max-w-[120px] max-h-[80px] m-3" src={doc.Hash} alt="document"/>
                                   )
                                 })}
                               </div>

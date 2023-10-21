@@ -135,9 +135,8 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
       }
       setactivecompanyDetails(activecompanyDetails);
       setactiveCompData(res);
-      // setactiveCompData(['hg','hhg','ghg']);
     } catch (error) {
-      console.log("Error");
+      console.log("Error",error);
     }
   }
   const revokeAccess=async(address)=>{
@@ -150,7 +149,7 @@ const UserPage = ({ contract, fetched, folders,account,userAlice }) => {
   }
   useEffect(()=>{
     callrequests();
-    // activeCompanies();
+    activeCompanies();
   },[account])
   return (
     <>
