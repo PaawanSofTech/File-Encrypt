@@ -1,0 +1,39 @@
+.loader{
+    font-size: 2.5rem;
+    // margin-top: 4rem;
+    // height: 100%;
+    display: flex;
+    // flex-direction: row;
+    justify-content: center;
+    // position: fixed;
+    &__text{
+        margin-right: 1rem;
+        align-self: center;
+    }
+    &__spinner{
+        align-self: center;
+        animation: spin .5s linear infinite;
+    }
+}
+
+@keyframes spin {
+    0%{
+        transform: rotate(0deg);
+    }
+    25%{
+        
+        transform: rotate(90deg);
+    }
+    50%{
+        
+        transform: rotate(180deg);
+    }
+    75%{
+        transform: rotate(270deg);
+        
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+    
+}

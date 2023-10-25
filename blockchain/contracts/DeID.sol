@@ -48,10 +48,6 @@ contract DeID{
         bool[] Folders;
     }
 
-    struct DataAccessed{
-        address Member;
-        uint Time;
-    }
     // -- User --
 
     // mapping( address => address[]) private Nominee;
@@ -75,9 +71,6 @@ contract DeID{
     mapping( address => Request[]) private activeCompanies;
 
     mapping( address => mapping(address => bool)) private companyAccess;
-
-    mapping ( address => DataAccessed[]) private AccessHistory;
-
     mapping( address => Request[]) private PreviousCompanies;
     //add documents for company also!
 
@@ -131,6 +124,7 @@ contract DeID{
     function requestDetails(address _address,bool DOB,bool Phone,bool Name,bool Image,bool[] calldata _Folders) public {
         require(companyRegistered[msg.sender] ,"Only Companies Can Request");
         require(userRegistered[_address] ,"User Not registered");
+        require(companyAccess[msg.sender][_address] == false,"Cant");
         Request memory request;
         request.Address = msg.sender;
         request.DOB = DOB;
@@ -192,7 +186,6 @@ contract DeID{
     function returnUserDocs(address Address) public view returns(Documents[] memory){
         require(companyRegistered[msg.sender],"Not a Registered Company");
         require(companyAccess[msg.sender][Address],"You Don't Have Access to User");
-        // AccessHistory[msg.sender].push(DataAccessed(msg.sender,block.timestamp));
         return companyDocs[keccak256(abi.encodePacked(msg.sender))][Address];
     }
 
@@ -224,6 +217,18 @@ contract DeID{
         }
     }
 
+    function accessedCompanies()public view returns(Request[] memory){
+        return activeCompanies[msg.sender];
+    }
+
+    //add compnay requets
+    // function folderAccess(address _user,address _company) public view returns(bool[] memory folds){
+    //     for( uint i =0 ;i< activeCompanies[_user].length;i++){
+    //         if(activeCompanies[_user][i].Address == _company){
+    //             folds =  activeCompanies[_user][i].Folders;
+    //         }
+    //     }
+    // }
     //return active companies
     //add events
 

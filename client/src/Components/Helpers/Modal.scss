@@ -1,0 +1,53 @@
+/* Modal.css */
+@import '../../styles/variables.scss';
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal {
+    // background-image: linear-gradient(to bottom, rgb(228, 222, 222),rgb(255, 255, 255));
+    // border: 1px solid #ccc;
+    padding: 1.5rem;
+    width: auto;
+    position: relative;
+    transform: scale(1.4);
+    border-radius: 1.6rem;
+    animation: popup .2s ease-out;
+    animation-fill-mode: backwards;
+  }
+  
+  .close-button {
+    position: absolute;
+    color: rgb(27, 27, 27);
+    top: -.5rem;
+    right: -.5rem;
+    padding: .4rem;
+    box-shadow: 0 3px 1rem rgba(0, 0, 0, 0.5);
+    transform: scale(1.4);
+    cursor: pointer;
+    border-radius: 50px;
+    background: rgb(234, 234, 234);
+  }
+  @keyframes popup {
+    0%{
+        opacity: 0;
+        transform: scale(.7) translateY(-10px);
+    }
+    50%{
+        opacity: 1;
+        
+    }
+    100%{
+        opacity: 1;
+    }
+    
+}

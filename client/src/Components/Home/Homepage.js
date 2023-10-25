@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "./Homepage.scss";
 import { ethers } from "ethers";
+import { PushAPI } from '@pushprotocol/restapi'
 import SignUp from "../Auth/SignUp";
 import { PiUserCircle } from "react-icons/pi";
 import DeID from "../../artifacts/contracts/DeID.sol/DeID.json";
-import Documents from "./Documents";
-import Folder from "../Cards/Folder";
 import UserPage from "./UserPage";
 import CompanyPage from "./CompanyPage";
+import { truncateAddressNavbar } from "../Helpers/truncateAddress";
+import Notifications from '../Cards/Notifications'
+import Loader from "../Helpers/Loader";
+import Logo from '../Cards/Logo'
+import Push from "../Cards/Push";
+import './LandingPage.scss'
+import Lottie from 'react-lottie';
+import animationData from './Lottie/security-research.json';
 const Homepage = ({ setconnected }) => {
+  const [signers, setsigners] = useState(null);
   const [connect, setconnect] = useState(false);
   const [provider, setprovider] = useState(null);
   const [accounts, setaccounts] = useState(null);
@@ -18,7 +26,11 @@ const Homepage = ({ setconnected }) => {
   const [userDetails, setuserDetails] = useState(null);
   const [registered, setregistered] = useState(true);
   const [fetched, setfetched] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [userAlice, setuserAlice] = useState(null);
+
   const connectFetch = async () => {
+    setLoader(true);
     const loadProvider = async (provider) => {
       if (provider) {
         window.ethereum.on("chainChanged", () => {
@@ -29,39 +41,41 @@ const Homepage = ({ setconnected }) => {
         });
         const { ethereum } = window;
         try {
-          await ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x13881" }],
-          });
+        await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x5" }],
+        });
         } catch (switchError) {
-          // This error code indicates that the chain has not been added to MetaMask.
-          if (switchError.code === 4902) {
-            // Do something
-            window.ethereum
-              .request({
-                method: "wallet_addEthereumChain",
-                params: [
-                  {
-                    chainId: "0x13881",
-                    chainName: "Polygon",
-                    nativeCurrency: {
-                      name: "Mumbai",
-                      symbol: "MATIC",
-                      decimals: 18,
-                    },
-                    rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
-                    blockExplorerUrls: ["https://mumbai.polygonscan.com"],
-                  },
-                ],
-              })
-              .catch((error) => {});
-          }
+        // This error code indicates that the chain has not been added to MetaMask.
+        if (switchError.code === 4902) {
+        // Do something
+        window.ethereum
+        .request({
+        method: "wallet_addEthereumChain",
+        params: [
+        {
+        chainId: "0x5",
+        chainName: "Ethereum",
+        nativeCurrency: {
+        name: "Goerli",
+        symbol: "ETH",
+        decimals: 18,
+        },
+        rpcUrls: ["https://rpc.ankr.com/eth_goerli"],
+        blockExplorerUrls: ["https://goerli.etherscan.io"],
+        },
+        ],
+        })
+        .catch((error) => {});
+        }
         }
         await provider.send("eth_requestAccounts", []);
+        console.log("Provider",provider);
         const signer = provider.getSigner();
+        setsigners(signer);
         const address = await signer.getAddress();
         setaccounts(address);
-        let contractAddress = "0xc182C4Ee6D85E0E99DB147908ac3F59cff02973b"; //mumbai
+        let contractAddress = "0x339d6C9602E47E0834735ebE570200AC870529c1"; //mumbai
         //0x7492502792E8B8efE1503DAE8fa5913a008F5934 latest mumbai
         //0x196d4119944CD005AD917466B8e2e2Ec018FA547 fujin testnet 
         const contractInstance = new ethers.Contract(
@@ -85,6 +99,14 @@ const Homepage = ({ setconnected }) => {
       console.error("MetaMask not Installed");
     }
   };
+  const registerPush=async()=>{
+    try {
+      const _userAlice = await PushAPI.initialize(signers, { env: 'staging' });
+      setuserAlice(_userAlice);
+    } catch (error) {
+      
+    }
+  }
   const checkRegistered = async () => {
     try {
       const res = await contract.ifRegistered();
@@ -92,6 +114,7 @@ const Homepage = ({ setconnected }) => {
       const mssg = JSON.parse(JSON.stringify(res));
       var val = parseInt(mssg.hex, 16);
       console.log("time", val);
+      setLoader(false);
       if (val === 0) {
         const userData = await contract.userDetails();
         console.log(userData);
@@ -100,10 +123,12 @@ const Homepage = ({ setconnected }) => {
         setfetched(true);
         setisuser(true);
         setregistered(true);
+        registerPush();
       } else if (val === 1) {
         const userData = await contract.companyDetails(accounts);
         setuserDetails(userData);
         setfetched(true);
+        registerPush();
         setregistered(true);
       } else {
         console.log("Not Registered");
@@ -114,72 +139,253 @@ const Homepage = ({ setconnected }) => {
       setregistered(false);
     }
   };
-
   useEffect(() => {
     connect && checkRegistered();
-  }, [contract]);
+  }, [contract,provider]);
+  const [colorChange, setColorchange] = useState(false);
+    const changeNavbarColor = () => {
+        if (window.scrollY >= 80) {
+            setColorchange(true);
+            console.log("Chagned color");
+        }
+        else {
+            setColorchange(false);
+            console.log("Chagned back color");
+        }
+    };
+    // window.addEventListener('scroll', changeNavbarColor);
   //Use effect to get the logged in details, to accordingly load user and company homepage
   return (
     <div>
-      {registered ? (
+    
+      {connect ? (
         <>
-          <div className="flex navbar">
-            {fetched && (
-              <div className="flex absolute left-6  items-center flex-row text-3xl">
-                {userDetails.Image.length === 0 ? (
-                  <PiUserCircle size={37} className="ml-6" />
-                ) : (
-                  <img
-                    src={userDetails.Image}
-                    alt="Profile"
-                    className="max-h-[37px] ml-6"
-                  />
-                )}
-                <p className="ml-4">{userDetails.Name}</p>
+        <div className="logo" style={{
+          width: 'auto',
+          marginTop: '3rem',
+          paddingLeft: '4rem',
+          height: '6rem',
+          display: 'flex'
+        }}>
+          <Logo/>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          paddingLeft:'2.8rem',
+          fontSize: '30px',
+          // fontFamily: 'serrif',
+          fontWeight: '600'
+        }}>
+           File Guardian
+          </div>
+        </div>
+          <div className="navbar ">
+            <div className={`navbar__center`}>
+              <div style={{
+                fontSize: '16px',
+                display: 'flex',
+                gap: '3rem'
+              }}>
+                {isuser ? <>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>My folders</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button>
+                </> : 
+                <>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>Active users</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                {/* <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button> */}
+                
+                </>}
               </div>
-            )}
-            <div className="navbar__center">
-              <h1 className="navbar__center--brand">Group Project</h1>
-            </div>
-            <div className="navbar__right">
-              {connect && (
-                <button className="navbar__right--edit">Edit Profile</button>
-              )}
-              {connect ? (
-                <button className="truncate max-w-[230px] navbar__right--connect">
-                  accounts : {accounts}
-                </button>
-              ) : (
-                <button
+              <div className={`${" transition ease-in-out delay-150" } navbar__right`} style={{}}>
+                {fetched && isuser  && (
+                    <div className="navbar__left">
+                      {userDetails?.Image.length === 0 ? (
+                        <PiUserCircle size={30}/>
+                        ) : (
+                          <img
+                          src={userDetails?.Image}
+                          alt="Profile"
+                          className="max-h-[30px]"
+                          />
+                          )
+                        }
+                    </div>
+                )}
+                {connect && fetched ? (
+                  <>
+                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
+                    }}>
+                      accounts : {truncateAddressNavbar(accounts)}
+                    </button>
+                      <button className="navbar__right--notify">
+                        <Notifications userAlice={userAlice}/>
+                      </button>
+                  </>
+                ) : (
+                  <button
                   onClick={connectFetch}
                   className="navbar__right--connect"
-                >
-                  Connect
-                </button>
-              )}
+                  style={{
+                  }}
+                  >
+                    Connect
+                  </button>
+                )}
+              </div>
             </div>
+            {
+            }
           </div>
+          {
+            registered ?
+            <div style={{ overflowY: "scroll"}}>
+            {
+              !loader ? <>
+                  
+                {isuser ? (
+                  <UserPage 
+                  fetched={fetched} 
+                  contract={contract} 
+                  folders={folders} 
+                  userAlice={userAlice}
+                  account = {accounts}
+                  connect = {connect}
+                  />
+                  ) : (
+                  <CompanyPage
+                  userDetails={userDetails}
+                userAlice={userAlice}
+                  fetched={fetched}
+                    contract={contract}
+                    connect={connect}
+                    />
+                    )}
+            </> : 
+            < div><Loader/></div>
+            }
+            </div>
+             
+            :
+            <SignUp accounts={accounts} contract={contract} provider={provider} />
+          }
 
-          {isuser ? (
-            <UserPage 
-              fetched={fetched} 
-              contract={contract} 
-              folders={folders} 
-              account = {accounts}
-              connect = {connect}
-            />
-          ) : (
-            <CompanyPage
-              fetched={fetched}
-              contract={contract}
-              connect={connect}
-              // folders={folders}
-            />
-          )}
+          
         </>
+        
       ) : (
-        <SignUp contract={contract} />
-      )}
+        <>
+          <div className="navbar ">
+            <div className={`navbar__center`}>
+              <div style={{
+                fontSize: '16px',
+                display: 'flex',
+                gap: '3rem'
+              }}>
+                {isuser ? <>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>My folders</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button>
+                </> : 
+                <>
+                <button onClick={()=>window.scrollTo({top: 0, behavior: "smooth"})}>Active users</button>
+                <button onClick={()=>window.scrollTo({top: 500, behavior: "smooth"})}>Requests</button>
+                {/* <button onClick={()=>window.scrollTo({top: 1800, behavior: "smooth"})}>History</button> */}
+                
+                </>}
+              </div>
+              <div className={`${" transition ease-in-out delay-150" } navbar__right`} style={{}}>
+                {fetched && isuser  && (
+                    <div className="navbar__left">
+                      {userDetails?.Image.length === 0 ? (
+                        <PiUserCircle size={30}/>
+                        ) : (
+                          <img
+                          src={userDetails?.Image}
+                          alt="Profile"
+                          className="max-h-[30px]"
+                          />
+                          )
+                        }
+                    </div>
+                )}
+                {connect && fetched ? (
+                  <>
+                    <button className="truncate max-w-[250px] flex navbar__right--connect" style={{
+                    }}>
+                      accounts : {truncateAddressNavbar(accounts)}
+                    </button>
+                      <button className="navbar__right--notify">
+                        <Notifications userAlice={userAlice}/>
+                      </button>
+                  </>
+                ) : (
+                  <button
+                  onClick={connectFetch}
+                  className="navbar__right--connect"
+                  style={{
+                  }}
+                  >
+                    Connect
+                  </button>
+                )}
+              </div>
+            </div>
+            {
+            }
+          </div>
+          <div className='container'>
+            <div className="logo" style={{
+            width: 'auto',
+            marginTop: '3rem',
+            paddingLeft: '4rem',
+            height: '6rem',
+            display: 'flex'
+          }}>
+            <Logo/>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            paddingLeft:'2.8rem',
+            fontSize: '30px',
+            // fontFamily: 'serrif',
+            fontWeight: '600'
+          }}>
+            File Guardian
+            </div>
+            </div>
+            <div className="container__content">
+              <div className='container__content__text'>
+                  <div className='header'>
+                  Guardians of Your Confidentiality: Protecting Your Important Documents
+                  </div>
+                  <div className='summary'>
+                  Take control of the privacy of your precious documents by using File Guardian, ensuring that only those you've granted access can use them.
+                  </div>
+              </div>
+              <div className='container__content__anim'>
+                  {/* <script src='./security-research.json'></script> */}
+                  {/* <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+      <lottie-player src="https://lottie.host/6f4ee854-3625-4849-8985-e423a0752949/hZWZsrb0zk.json" background="transparent" speed="1" style={{width: '300px', height: '300px'}} direction="1" mode="normal" loop controls autoplay>
+      </lottie-player> */}
+                  <Lottie 
+                      options={{loop: true,
+                        autoplay: true,
+                        animationData: animationData,
+                        rendererSettings: {
+                          preserveAspectRatio: "xMidYMid slice"
+                        }
+                      }}
+                      height={400}
+                      width={450}
+                      />
+              </div>
+        </div>
+    </div>
+        </>
+        )}
     </div>
   );
 };

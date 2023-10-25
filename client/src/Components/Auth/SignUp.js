@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import UserSignUp from './UserSignUp.js'
 import CompanySignUp from './CompanySignUp.js'
 import './SignUp.scss'
-const SignUp = ({contract}) => {
+const SignUp = ({contract,accounts,provider}) => {
     const [isUser, setIsUser] = useState(true);
     const [isCompany, setIsCompany] = useState(false);
     return (
@@ -75,7 +75,7 @@ const SignUp = ({contract}) => {
             </div>
             <div className='sign-up__form'>
                 {isUser ? <UserSignUp contract={contract}/>: <></>}
-                {isCompany ? <CompanySignUp contract={contract} />: <></>}
+                {isCompany ? <CompanySignUp provider={provider} accounts={accounts} contract={contract} />: <></>}
             </div>
         </div>
 

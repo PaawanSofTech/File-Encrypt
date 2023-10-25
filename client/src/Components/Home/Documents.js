@@ -12,7 +12,7 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
   const [uploading, setuploading] = useState(false);
   const [fileName, setfileName] = useState('');
   const hiddenFileInput = useRef(null);
-  const fileTypes = ["PDF", "DOCX"];
+  const fileTypes = ["JPEG", "PNG", "JPG"];
   useEffect(()=>{},[file])
   const uploadFile = async () => {
     if (file) {
@@ -57,7 +57,7 @@ const Documents = ({docs,contract,name,val,setfolderclosed}) => {
     return time;
   }
   return (
-    <div className='flex-col flex items-center'>
+    <div className='flex-col flex items-center' style={{transform: 'translateY(10rem)'}}>
       <button onClick={()=>{setfolderclosed(true)}} className=' absolute left-28' style={{marginTop: '4rem'}}>
         <IoIosArrowBack size={37} />
       </button>
