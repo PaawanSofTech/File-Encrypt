@@ -19,11 +19,11 @@ key1 = b'A)8F\xbc\xe9\xcc/\x1d@0\xe5h?\xd4\xabP"4`!\x14`\x1f\x9a\x05\xf0\xcf\xd1
 encrypted_data1, iv1 = encrypt_aes(key1, image_data1)
 
 # Encode the encrypted data to base64
-base64_encrypted_data1 = base64.b64encode(encrypted_data1+"==").decode('utf-8')
+#base64_encrypted_data1 = base64.b64encode(encrypted_data1+"==").decode('utf-8')
 
 # Save the base64-encoded data and IV to files
 with open('encrypted_image1.enc', 'wb') as encrypted_file:
-    encrypted_file.write(base64_encrypted_data1.encode('utf-8'))
+    encrypted_file.write(encrypted_data1)
 with open('iv1.enc', 'wb') as iv_file:
     iv_file.write(iv1)
 
@@ -35,10 +35,10 @@ key2 = b'A)8F\xbc\xe9\xcc/\x1d@0\xe5h?\xd4\xabP"4`!\x14`\x1f\x9a\x05\xf0\xcf\xd1
 encrypted_data2, iv2 = encrypt_aes(key2, image_data2)
 
 # Encode the encrypted data to base64
-base64_encrypted_data2 = base64.b64encode(encrypted_data2+"==").decode('utf-8')
+#base64_encrypted_data2 = base64.b64encode(encrypted_data2+"==").decode('utf-8')
 
 # Save the base64-encoded data and IV to files
 with open('encrypted_image2.enc', 'wb') as encrypted_file:
-    encrypted_file.write(base64_encrypted_data2.encode('utf-8'))
+    encrypted_file.write(encrypted_data2)
 with open('iv2.enc', 'wb') as iv_file:
     iv_file.write(iv2)

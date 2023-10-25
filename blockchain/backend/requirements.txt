@@ -1,0 +1,9 @@
+fastapi==0.104.0
+imagehash==4.3.1
+numpy==1.25.2
+Pillow==10.1.0
+pycryptodome==3.19.0
+pymongo==4.5.0
+scipy==1.11.3
+tensorflow==2.14.0
+uvicorn==0.23.2
